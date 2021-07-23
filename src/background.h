@@ -8,6 +8,8 @@
 #define BACKGROUND_LINE_TILE_START 192
 #define BACKGROUND_STAR_POS_COUNT 6
 
+#define BACKGROUND_LINE_X 16
+
 extern u8 backgroundTime;
 
 void BackgroundInit();

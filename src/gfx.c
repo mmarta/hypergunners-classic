@@ -13,6 +13,22 @@ const char *mapPlayer[] = {
     mapPlayer7
 };
 
+const char mapLaserPlayerFull[] PROGMEM = {
+    1,2,
+    LASER_TILE_START + 1, LASER_TILE_START
+};
+
+const char mapLaserPlayerTop[] PROGMEM = {
+    1,2,
+    LASER_TILE_START + 3, LASER_TILE_START + 2
+};
+
+const char mapLaserPlayerBottom[] PROGMEM = {
+    1,2,
+    LASER_TILE_START + 5, LASER_TILE_START + 4
+};
+
+
 void PrintVerticalPROGMEM(u8 x, u8 y, const char *str) {
     u8 i = 0, c = pgm_read_byte(&(str[i]));
     while(c) {

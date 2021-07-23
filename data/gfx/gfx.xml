@@ -13,6 +13,11 @@
             <map var-name="mapPlayer6" left="12" top="2" width="2" height="2" />
             <map var-name="mapPlayer7" left="14" top="2" width="2" height="2" />
 
+            <map var-name="mapPlayerHalfClawLeft" left="24" top="3" width="2" height="1" />
+            <map var-name="mapPlayerClawLeft" left="24" top="2" width="2" height="2" />
+            <map var-name="mapPlayerHalfClawRight" left="26" top="2" width="2" height="1" />
+            <map var-name="mapPlayerClawRight" left="26" top="2" width="2" height="2" />
+            <map var-name="mapPlayerClawWire" left="28" top="2" width="2" height="1" />
         </maps>
     </output>
 </gfx-xform>

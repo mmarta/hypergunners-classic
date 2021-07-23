@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "system.h"
 #include "gfx.h"
 #include "background.h"
 #include "player.h"
@@ -14,6 +15,9 @@ int main() {
 
     while(1) {
         WaitVsync(1);
+
+        ReadControls();
+        PlayerInput(&players[0]);
 
         BackgroundUpdate();
         PlayerUpdate(&players[0]);
