@@ -13,6 +13,22 @@ const char *mapPlayer[] = {
     mapPlayer7
 };
 
+const char *mapEnemy[] = {
+    mapEnemy0,
+    mapEnemy1,
+    mapEnemy2,
+    mapEnemy3,
+    mapEnemy4,
+    mapEnemy5
+};
+
+const char *mapEnemyExplode[] = {
+    mapEnemyExplode0,
+    mapEnemyExplode1,
+    mapEnemyExplode2,
+    mapEnemyExplode3
+};
+
 const char mapLaserPlayerFull[] PROGMEM = {
     1,2,
     LASER_TILE_START + 1, LASER_TILE_START

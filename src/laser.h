@@ -1,5 +1,5 @@
-#ifndef HYPERGUNNERS_CLASSIC_LASER_H
-#define HYPERGUNNERS_CLASSIC_LASER_H
+#ifndef HGC_LASER_H
+#define HGC_LASER_H
 
 #include "defines.h"
 #include "gfx.h"

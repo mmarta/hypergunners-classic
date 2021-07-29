@@ -1,5 +1,5 @@
-#ifndef HYPERGUNNERS_CLASSIC_SYSTEM_H
-#define HYPERGUNNERS_CLASSIC_SYSTEM_H
+#ifndef HGC_SYSTEM_H
+#define HGC_SYSTEM_H
 
 #include "defines.h"
 

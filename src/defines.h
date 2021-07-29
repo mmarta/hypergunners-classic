@@ -1,5 +1,5 @@
-#ifndef HYPERGUNNERS_CLASSIC_DEFINES_H
-#define HYPERGUNNERS_CLASSIC_DEFINES_H
+#ifndef HGC_DEFINES_H
+#define HGC_DEFINES_H
 
 #include <avr/io.h>
 #include <stdlib.h>

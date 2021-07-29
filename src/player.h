@@ -1,5 +1,5 @@
-#ifndef HYPERGUNNERS_CLASSIC_PLAYER_H
-#define HYPERGUNNERS_CLASSIC_PLAYER_H
+#ifndef HGC_PLAYER_H
+#define HGC_PLAYER_H
 
 #include "defines.h"
 #include "system.h"

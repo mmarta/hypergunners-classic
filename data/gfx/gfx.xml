@@ -18,6 +18,18 @@
             <map var-name="mapPlayerHalfClawRight" left="26" top="2" width="2" height="1" />
             <map var-name="mapPlayerClawRight" left="26" top="2" width="2" height="2" />
             <map var-name="mapPlayerClawWire" left="28" top="2" width="2" height="1" />
+
+            <map var-name="mapEnemy0" left="0" top="4" width="2" height="2" />
+            <map var-name="mapEnemy1" left="2" top="4" width="2" height="2" />
+            <map var-name="mapEnemy2" left="4" top="4" width="2" height="2" />
+            <map var-name="mapEnemy3" left="6" top="4" width="2" height="2" />
+            <map var-name="mapEnemy4" left="8" top="4" width="2" height="2" />
+            <map var-name="mapEnemy5" left="10" top="4" width="2" height="2" />
+
+            <map var-name="mapEnemyExplode0" left="22" top="4" width="2" height="2" />
+            <map var-name="mapEnemyExplode1" left="24" top="4" width="2" height="2" />
+            <map var-name="mapEnemyExplode2" left="26" top="4" width="2" height="2" />
+            <map var-name="mapEnemyExplode3" left="28" top="4" width="2" height="2" />
         </maps>
     </output>
 </gfx-xform>

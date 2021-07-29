@@ -1,5 +1,5 @@
-#ifndef HYPERGUNNERS_CLASSIC_GFX_H
-#define HYPERGUNNERS_CLASSIC_GFX_H
+#ifndef HGC_GFX_H
+#define HGC_GFX_H
 
 #include "defines.h"
 
@@ -8,6 +8,8 @@
 extern const char gfxTiles[];
 
 extern const char *mapPlayer[];
+extern const char *mapEnemy[];
+extern const char *mapEnemyExplode[];
 
 extern const char mapPlayerHalfClawLeft[];
 extern const char mapPlayerClawLeft[];

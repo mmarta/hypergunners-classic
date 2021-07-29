@@ -3,8 +3,10 @@
 #include "gfx.h"
 #include "background.h"
 #include "player.h"
+#include "enemy.h"
 
 int main() {
+    u8 i;
     srand(GetTrueRandomSeed());
 
     SetTileTable(gfxTiles);
@@ -19,7 +21,15 @@ int main() {
         ReadControls();
         PlayerInput(&players[0]);
 
+        if(rand() % 200 == 0) {
+            EnemyInitNext();
+        }
+
         BackgroundUpdate();
+        i = ENEMY_COUNT;
+        while(i--) {
+            EnemyUpdate(&enemies[i]);
+        }
         PlayerUpdate(&players[0]);
     }
 

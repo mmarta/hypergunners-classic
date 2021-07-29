@@ -1,5 +1,5 @@
-#ifndef HYPERGUNNERS_CLASSIC_BACKGROUND_H
-#define HYPERGUNNERS_CLASSIC_BACKGROUND_H
+#ifndef HGC_BACKGROUND_H
+#define HGC_BACKGROUND_H
 
 #include "defines.h"
 #include "gfx.h"
