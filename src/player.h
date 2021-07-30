@@ -13,7 +13,7 @@
 #define PLAYER_LASER_COUNT 2
 
 typedef struct {
-    u8 lane, x, y, active, animTime, killTime, index, destY, clawTime;
+    u8 lane, x, y, active, animTime, killTime, index, destY, clawTime, scoreDelta;
     u8 fireButton, leftStick, rightStick;
     u16 score;
     Laser lasers[PLAYER_LASER_COUNT];

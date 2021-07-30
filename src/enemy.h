@@ -20,6 +20,8 @@ typedef struct {
 extern Enemy enemies[];
 
 void EnemyInitNext();
+u8 EnemyIsCollidable(Enemy *);
+void EnemyKill(Enemy *);
 void EnemyUpdate(Enemy *);
 
 #endif

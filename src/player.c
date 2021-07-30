@@ -15,6 +15,7 @@ void PlayerInit(Player *player, u8 index) {
     player->active = 1;
     player->animTime = 0;
     player->score = 0;
+    player->scoreDelta = 0;
 
     player->clawTime = 0;
     player->fireButton = 0;
@@ -135,12 +136,18 @@ void PlayerUpdate(Player *player) {
         i++;
     }
 
+    if(player->scoreDelta) {
+        player->score += player->scoreDelta;
+        PrintU16Vertical(1, player->index ? 0 : 20, player->score, 50000, 1);
+        player->scoreDelta = 0;
+    }
+
     player->animTime++;
     if(player->animTime >= 12) {
         player->animTime = 0;
     }
 
-    if(player->clawTime && !(player->animTime % 2)) {
+    if(player->clawTime) {
         PlayerUpdateClaw(player);
 
         if(player->clawTime > 4) {

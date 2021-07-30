@@ -21,7 +21,17 @@ void EnemyInit(Enemy *enemy) {
     enemy->y = 1 + (enemy->lane * 3);
     enemy->x = END_POINT_X;
     enemy->active = 1;
+    enemy->dieTime = 0;
+    enemy->score = 1;
     EnemyDraw(enemy);
+}
+
+u8 EnemyIsCollidable(Enemy *enemy) {
+    return enemy->active && !enemy->dieTime;
+}
+
+void EnemyKill(Enemy *enemy) {
+    enemy->dieTime = 1;
 }
 
 void EnemyUpdate(Enemy *enemy) {
@@ -39,6 +49,7 @@ void EnemyUpdate(Enemy *enemy) {
                 break;
             case 17:
                 EnemyDeactivate(enemy);
+                return;
         }
         enemy->dieTime++;
         return;
@@ -68,9 +79,9 @@ void EnemyDraw(Enemy *enemy) {
     if(enemy->dieTime) {
         if(enemy->dieTime <= 4) {
             DrawMap(enemy->x, enemy->y, mapEnemyExplode[0]);
-        } else if(enemy->dieTime <= 4) {
+        } else if(enemy->dieTime <= 8) {
             DrawMap(enemy->x, enemy->y, mapEnemyExplode[1]);
-        } else if(enemy->dieTime <= 4) {
+        } else if(enemy->dieTime <= 12) {
             DrawMap(enemy->x, enemy->y, mapEnemyExplode[2]);
         } else {
             DrawMap(enemy->x, enemy->y, mapEnemyExplode[3]);
@@ -83,5 +94,6 @@ void EnemyDraw(Enemy *enemy) {
 
 void EnemyDeactivate(Enemy *enemy) {
     enemy->active = 0;
+    enemy->dieTime = 0;
     Fill(enemy->x, enemy->y, ENEMY_SIZE, ENEMY_SIZE, 0);
 }

@@ -6,7 +6,7 @@
 #include "enemy.h"
 
 int main() {
-    u8 i;
+    u8 i, j, k;
     srand(GetTrueRandomSeed());
 
     SetTileTable(gfxTiles);
@@ -17,6 +17,20 @@ int main() {
 
     while(1) {
         WaitVsync(1);
+
+        // Collision first
+        i = ENEMY_COUNT;
+        while(i--) {
+            j = 0;
+            while(j < PLAYER_COUNT) {
+                k = 0;
+                while(k < PLAYER_LASER_COUNT) {
+                    CollisionLaserEnemy(&players[j].lasers[k], &enemies[i], &players[j]);
+                    k++;
+                }
+                j++;
+            }
+        }
 
         ReadControls();
         PlayerInput(&players[0]);
