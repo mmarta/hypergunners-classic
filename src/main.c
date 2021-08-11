@@ -4,6 +4,7 @@
 #include "background.h"
 #include "player.h"
 #include "enemy.h"
+#include "collision.h"
 
 int main() {
     u8 i, j, k;
@@ -28,6 +29,14 @@ int main() {
                     CollisionLaserEnemy(&players[j].lasers[k], &enemies[i], &players[j]);
                     k++;
                 }
+
+                k = 0;
+                while(k < PLAYER_EXTRA_LASER_COUNT) {
+                    CollisionLaserEnemy(&players[j].extraLasers[k], &enemies[i], &players[j]);
+                    k++;
+                }
+
+                CollisionWhiplineEnemy(&players[j].whipline, &enemies[i], &players[j]);
                 j++;
             }
         }
@@ -35,7 +44,7 @@ int main() {
         ReadControls();
         PlayerInput(&players[0]);
 
-        if(rand() % 200 == 0) {
+        if(rand() % 50 == 0) {
             EnemyInitNext();
         }
 

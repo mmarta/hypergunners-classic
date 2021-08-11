@@ -8,7 +8,7 @@
 #define LASER_H 2
 
 typedef struct {
-    u8 x, y, halfStep, active, skipFrame;
+    u8 lane, x, y, halfStep, active, skipFrame;
 } Laser;
 
 void LaserInit(Laser *);

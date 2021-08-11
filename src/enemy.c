@@ -23,6 +23,7 @@ void EnemyInit(Enemy *enemy) {
     enemy->active = 1;
     enemy->dieTime = 0;
     enemy->score = 1;
+    enemy->preTime = 60;
     EnemyDraw(enemy);
 }
 

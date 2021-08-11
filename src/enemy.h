@@ -3,6 +3,7 @@
 
 #include "defines.h"
 #include "gfx.h"
+#include "background.h"
 
 #define ENEMY_SIZE 2
 
@@ -13,7 +14,7 @@ typedef enum {
 } EnemyType;
 
 typedef struct {
-    u8 x, y, active, animTime, moveTime, dieTime, score, lane;
+    u8 x, y, active, animTime, moveTime, dieTime, score, lane, preTime;
     EnemyType type;
 } Enemy;
 

@@ -19,8 +19,11 @@ void PlayerInit(Player *player, u8 index) {
 
     player->clawTime = 0;
     player->fireButton = 0;
+    player->whipButton = 0;
     player->leftStick = 0;
     player->rightStick = 0;
+
+    player->whipline.usable = 1;
 
     if(index) {
         PrintVerticalRAM(0, 4, "2P");
@@ -32,7 +35,7 @@ void PlayerInit(Player *player, u8 index) {
 }
 
 u8 PlayerIsControllable(Player *player) {
-    return player->active && !player->clawTime;
+    return player->active && !player->clawTime && !player->whipline.active;
 }
 
 void PlayerInput(Player *player) {
@@ -65,10 +68,28 @@ void PlayerInput(Player *player) {
     if(controls[player->index] & BTN_A) {
         if(!player->fireButton) {
             LaserFireNext(player->lasers, PLAYER_LASER_COUNT, player->x - 1, player->y);
+            if(!player->whipline.usable) {
+                if(player->y > 1) {
+                    LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->y - 3);
+                }
+
+                if(player->y < 25) {
+                    LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->y + 3);
+                }
+            }
             player->fireButton = 1;
         }
     } else if(player->fireButton) {
         player->fireButton = 0;
+    }
+
+    if(controls[player->index] & BTN_B) {
+        if(!player->whipButton) {
+            WhiplineInit(&player->whipline, player->lane);
+            player->whipButton = 1;
+        }
+    } else if(player->whipButton) {
+        player->whipButton = 0;
     }
 }
 
@@ -82,10 +103,13 @@ void PlayerLaunchClaw(Player *player, u8 destY) {
 }
 
 void PlayerUpdateClaw(Player *player) {
+    u8 laneUp = 1;
+
     if(player->clawTime >= 4) {
         if(player->destY < player->y) {
             Fill(player->x, player->y + 1, PLAYER_SIZE, 1, 0);
             player->y--;
+            laneUp = 0;
         } else {
             Fill(player->x, player->y, PLAYER_SIZE, 1, 0);
             player->y++;
@@ -122,6 +146,7 @@ void PlayerUpdateClaw(Player *player) {
     player->clawTime++;
     if(player->clawTime >= 7) {
         player->clawTime = 0;
+        player->lane = player->lane + (laneUp ? 1 : -1);
     }
 }
 
@@ -135,6 +160,14 @@ void PlayerUpdate(Player *player) {
         LaserUpdate(&player->lasers[i]);
         i++;
     }
+
+    i = 0;
+    while(i < PLAYER_EXTRA_LASER_COUNT) {
+        LaserUpdate(&player->extraLasers[i]);
+        i++;
+    }
+
+    WhiplineUpdate(&player->whipline);
 
     if(player->scoreDelta) {
         player->score += player->scoreDelta;

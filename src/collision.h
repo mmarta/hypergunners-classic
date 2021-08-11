@@ -3,6 +3,7 @@
 
 #include "defines.h"
 #include "laser.h"
+#include "whipline.h"
 #include "player.h"
 #include "enemy.h"
 
