@@ -10,7 +10,7 @@
 
 #define BACKGROUND_LINE_X 16
 
-extern u8 backgroundTime;
+extern u8 bgTime;
 
 void BackgroundInit();
 void BackgroundUpdate();

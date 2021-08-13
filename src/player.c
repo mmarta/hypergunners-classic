@@ -14,8 +14,10 @@ void PlayerInit(Player *player, u8 index) {
 
     player->active = 1;
     player->animTime = 0;
+    player->superWeaponSeconds = 0;
     player->score = 0;
     player->scoreDelta = 0;
+    player->superWeaponFireTimer = 0;
 
     player->clawTime = 0;
     player->fireButton = 0;
@@ -68,15 +70,12 @@ void PlayerInput(Player *player) {
     if(controls[player->index] & BTN_A) {
         if(!player->fireButton) {
             LaserFireNext(player->lasers, PLAYER_LASER_COUNT, player->x - 1, player->y);
-            if(!player->whipline.usable) {
-                if(player->y > 1) {
-                    LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->y - 3);
-                }
-
-                if(player->y < 25) {
-                    LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->y + 3);
-                }
+            // Super Weapon Available? Fire that some frames later
+            if(player->superWeaponSeconds && !player->superWeaponFireTimer) {
+                player->superWeaponFireTimer = 6;
+                player->superWeaponY = player->y;
             }
+
             player->fireButton = 1;
         }
     } else if(player->fireButton) {
@@ -167,7 +166,39 @@ void PlayerUpdate(Player *player) {
         i++;
     }
 
-    WhiplineUpdate(&player->whipline);
+    if(WhiplineUpdate(&player->whipline)) {
+        player->superWeaponSeconds = 30;
+        player->timeOut = 60;
+        PrintVerticalRAM(30, 16, "SUPER GUN TIME");
+        PrintU8Vertical(30, 0, player->superWeaponSeconds);
+    }
+
+    if(player->superWeaponFireTimer == 1 && !player->extraLasers[0].active && !player->extraLasers[1].active) {
+        if(player->y > 1) {
+            LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->superWeaponY - 3);
+        }
+
+        if(player->y < 25) {
+            LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->superWeaponY + 3);
+        }
+    }
+
+    if(player->superWeaponFireTimer) {
+        player->superWeaponFireTimer--;
+    }
+
+    if(player->superWeaponSeconds) {
+        player->timeOut--;
+        if(!player->timeOut){
+            player->superWeaponSeconds--;
+            if(player->superWeaponSeconds) {
+                PrintU8Vertical(30, 0, player->superWeaponSeconds);
+                player->timeOut = 60;
+            } else {
+                Fill(30, 0, 1, 17, 0);
+            }
+        }
+    }
 
     if(player->scoreDelta) {
         player->score += player->scoreDelta;

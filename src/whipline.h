@@ -13,6 +13,6 @@ typedef struct {
 
 void WhiplineInit(Whipline *, u8);
 u8 WhiplineIsCollidable(Whipline *);
-void WhiplineUpdate(Whipline *);
+u8 WhiplineUpdate(Whipline *);
 
 #endif

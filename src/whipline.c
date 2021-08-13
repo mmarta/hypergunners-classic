@@ -21,9 +21,9 @@ u8 WhiplineIsCollidable(Whipline *whipline) {
     return whipline->active && !whipline->grabbedTime;
 }
 
-void WhiplineUpdate(Whipline *whipline) {
+u8 WhiplineUpdate(Whipline *whipline) {
     if(!whipline->active) {
-        return;
+        return 0;
     }
 
     u8 i = whipline->x, whipIndex = 0;
@@ -36,14 +36,14 @@ void WhiplineUpdate(Whipline *whipline) {
             whipline->x--;
             if(whipline->x <= END_POINT_X) {
                 WhiplineDeactivate(whipline);
-                return;
+                return 0;
             }
         } else {
             whipline->grabbedTime++;
             if(whipline->grabbedTime >= 13) {
                 whipline->usable = 0;
                 WhiplineDeactivate(whipline);
-                return;
+                return 1;
             }
         }
     } else {
@@ -58,6 +58,8 @@ void WhiplineUpdate(Whipline *whipline) {
         }
         i++;
     }
+
+    return 0;
 }
 
 void WhiplineDeactivate(Whipline *whipline) {

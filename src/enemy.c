@@ -22,13 +22,14 @@ void EnemyInit(Enemy *enemy) {
     enemy->x = END_POINT_X;
     enemy->active = 1;
     enemy->dieTime = 0;
+    enemy->moveTime = 0;
     enemy->score = 1;
-    enemy->preTime = 60;
+    enemy->preTime = 30;
     EnemyDraw(enemy);
 }
 
 u8 EnemyIsCollidable(Enemy *enemy) {
-    return enemy->active && !enemy->dieTime;
+    return enemy->active && !enemy->dieTime && !enemy->preTime;
 }
 
 void EnemyKill(Enemy *enemy) {
@@ -53,6 +54,22 @@ void EnemyUpdate(Enemy *enemy) {
                 return;
         }
         enemy->dieTime++;
+        return;
+    } else if(enemy->preTime) {
+        enemy->preTime--;
+        if(!enemy->preTime) {
+            if(bgTime < 8) {
+                Fill(BACKGROUND_LINE_X, enemy->y, 1, ENEMY_SIZE, BACKGROUND_LINE_TILE_START);
+            } else if(bgTime < 16 || bgTime >= 24) {
+                Fill(BACKGROUND_LINE_X, enemy->y, 1, ENEMY_SIZE, BACKGROUND_LINE_TILE_START + 1);
+            } else {
+                Fill(BACKGROUND_LINE_X, enemy->y, 1, ENEMY_SIZE, 0);
+            }
+            EnemyDraw(enemy);
+        } else if(bgTime % 8 == 1) {
+            EnemyDraw(enemy);
+        }
+
         return;
     }
 
@@ -86,6 +103,15 @@ void EnemyDraw(Enemy *enemy) {
             DrawMap(enemy->x, enemy->y, mapEnemyExplode[2]);
         } else {
             DrawMap(enemy->x, enemy->y, mapEnemyExplode[3]);
+        }
+        return;
+    } else if(enemy->preTime) {
+        if(bgTime < 8) {
+            DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[0]);
+        } else if(bgTime < 16 || bgTime >= 24) {
+            DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[1]);
+        } else {
+            DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[2]);
         }
         return;
     }

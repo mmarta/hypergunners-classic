@@ -29,6 +29,12 @@ const char *mapEnemy[] = {
     mapEnemy5
 };
 
+const char *mapEnemyPre[] = {
+    mapEnemyPre0,
+    mapEnemyPre1,
+    mapEnemyPre2
+};
+
 const char *mapEnemyExplode[] = {
     mapEnemyExplode0,
     mapEnemyExplode1,

@@ -8,5 +8,6 @@
 #include "enemy.h"
 
 void CollisionLaserEnemy(Laser *, Enemy *, Player *);
+void CollisionWhiplineEnemy(Whipline *, Enemy *, Player *);
 
 #endif
