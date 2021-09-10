@@ -167,9 +167,9 @@ void PlayerUpdate(Player *player) {
     }
 
     if(WhiplineUpdate(&player->whipline)) {
-        player->superWeaponSeconds = 30;
+        player->superWeaponSeconds = PLAYER_SUPER_WEAPON_MAX_SECONDS;
         player->timeOut = 60;
-        PrintVerticalRAM(30, 16, "SUPER GUN TIME");
+        PrintVerticalRAM(30, 16, "MULTI GUN TIME");
         PrintU8Vertical(30, 0, player->superWeaponSeconds);
     }
 

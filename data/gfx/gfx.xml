@@ -35,6 +35,11 @@
             <map var-name="mapEnemyPre1" left="14" top="7" width="2" height="2" />
             <map var-name="mapEnemyPre2" left="16" top="7" width="2" height="2" />
 
+            <map var-name="mapEnemyLaser" left="10" top="9" width="1" height="2" />
+            <map var-name="mapEnemyLaserSide" left="12" top="9" width="2" height="1" />
+            <map var-name="mapEnemyLaserCornerLeft" left="14" top="9" width="2" height="2" />
+            <map var-name="mapEnemyLaserCornerRight" left="16" top="9" width="2" height="2" />
+
             <map var-name="mapEnemyExplode0" left="22" top="7" width="2" height="2" />
             <map var-name="mapEnemyExplode1" left="24" top="7" width="2" height="2" />
             <map var-name="mapEnemyExplode2" left="26" top="7" width="2" height="2" />

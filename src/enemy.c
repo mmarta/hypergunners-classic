@@ -3,6 +3,7 @@
 Enemy enemies[ENEMY_COUNT];
 
 void EnemyInit(Enemy *);
+void EnemyFire(Enemy *);
 void EnemyDraw(Enemy *);
 void EnemyDeactivate(Enemy *);
 
@@ -25,11 +26,33 @@ void EnemyInit(Enemy *enemy) {
     enemy->moveTime = 0;
     enemy->score = 1;
     enemy->preTime = 30;
+    enemy->alreadyFired = 0;
     EnemyDraw(enemy);
 }
 
 u8 EnemyIsCollidable(Enemy *enemy) {
     return enemy->active && !enemy->dieTime && !enemy->preTime;
+}
+
+void EnemyFire(Enemy *enemy) {
+    u8 i = 0;
+
+    if(enemy->currentLaser || enemy->alreadyFired || enemy->x > 20) {
+        return;
+    }
+
+    while(i < ENEMY_COUNT) {
+        if(&enemies[i] != enemy && enemies[i].active) {
+            if(enemies[i].lane == enemy->lane) {
+                return;
+            }
+        }
+
+        i++;
+    }
+
+    enemy->currentLaser = EnemyLaserFireNext(enemy->x + 2, enemy->lane, LASER_STYLE_ENEMY_STRAIGHT);
+    enemy->alreadyFired = 1;
 }
 
 void EnemyKill(Enemy *enemy) {
@@ -73,6 +96,12 @@ void EnemyUpdate(Enemy *enemy) {
         return;
     }
 
+    if(enemy->currentLaser && !enemy->currentLaser->active) {
+        enemy->currentLaser = NULL;
+    } else if(rand() % 100 == 1) {
+        EnemyFire(enemy);
+    }
+
     enemy->animTime++;
     if(enemy->animTime >= 12) {
         enemy->animTime = 0;
@@ -84,7 +113,9 @@ void EnemyUpdate(Enemy *enemy) {
             EnemyDeactivate(enemy);
         } else {
             Fill(enemy->x, enemy->y, 1, ENEMY_SIZE, 0);
-            enemy->x++;
+            if(!enemy->currentLaser) {
+                enemy->x++;
+            }
             EnemyDraw(enemy);
         }
         enemy->moveTime = 0;

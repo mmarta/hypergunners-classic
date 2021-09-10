@@ -67,3 +67,74 @@ void LaserDeactivate(Laser *laser) {
     laser->active = 0;
     Fill(laser->x, laser->y, LASER_W, LASER_H, 0);
 }
+
+// ENEMY lasers
+
+Laser enemyLasers[ENEMY_LASER_COUNT];
+
+Laser * EnemyLaserFireNext(u8 x, u8 lane, LaserStyle laserStyle) {
+    u8 i = 0;
+    while(i < ENEMY_LASER_COUNT) {
+        if(!enemyLasers[i].active) {
+            EnemyLaserInit(&enemyLasers[i], x, lane, laserStyle);
+            return &enemyLasers[i];
+        }
+        i++;
+    }
+
+    return NULL;
+}
+
+void EnemyLaserInit(Laser *laser, u8 x, u8 lane, LaserStyle laserStyle) {
+    if(laserStyle == LASER_STYLE_ENEMY_STRAIGHT) {
+        laser->x = x;
+        laser->startX = x;
+        laser->y = (lane * 3) + 1;
+        laser->lane = lane;
+        laser->time = 0;
+        DrawMap(laser->x, laser->y, mapEnemyLaser);
+    }
+    laser->laserStyle = laserStyle;
+    laser->active = 1;
+}
+
+void EnemyLaserUpdate(Laser *laser) {
+    if(!laser->active) {
+        return;
+    }
+
+    u8 drawIndex;
+
+    if(laser->x == LANE_BOTTOM_X) {
+        laser->time++;
+
+        if(laser->time >= ENEMY_LASER_STOP_TIME) {
+            EnemyLaserDeactivate(laser);
+            return;
+        } else if(laser->time + (laser->x - laser->startX + 1) >= ENEMY_LASER_STOP_TIME) {
+            Fill(laser->x - (ENEMY_LASER_STOP_TIME - laser->time), laser->y, LASER_W, LASER_H, 0);
+        } else if(laser->time % 4 == 0) {
+            drawIndex = laser->startX;
+            while(drawIndex <= laser->x){
+                DrawMap(drawIndex, laser->y, mapEnemyLaser);
+                drawIndex++;
+            }
+        }
+    } else {
+        if(!laser->skipFrame) {
+            laser->x++;
+            DrawMap(laser->x, laser->y, mapEnemyLaser);
+        }
+
+        laser->skipFrame++;
+        if(laser->skipFrame >= 4) {
+            laser->skipFrame = 0;
+        }
+    }
+
+}
+
+void EnemyLaserDeactivate(Laser *laser) {
+    Fill(laser->x, laser->y, LASER_W, LASER_H, 0);
+    laser->active = 0;
+}

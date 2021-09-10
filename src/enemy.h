@@ -4,6 +4,7 @@
 #include "defines.h"
 #include "gfx.h"
 #include "background.h"
+#include "laser.h"
 
 #define ENEMY_SIZE 2
 
@@ -14,8 +15,9 @@ typedef enum {
 } EnemyType;
 
 typedef struct {
-    u8 x, y, active, animTime, moveTime, dieTime, score, lane, preTime;
+    u8 x, y, active, animTime, moveTime, dieTime, score, lane, preTime, alreadyFired;
     EnemyType type;
+    Laser *currentLaser;
 } Enemy;
 
 extern Enemy enemies[];

@@ -3,7 +3,7 @@
 
 #include "defines.h"
 
-#define LASER_TILE_START 202
+#define LASER_TILE_START 200
 
 extern const char gfxTiles[];
 
@@ -22,6 +22,11 @@ extern const char mapPlayerClawWire[];
 extern const char mapLaserPlayerFull[];
 extern const char mapLaserPlayerTop[];
 extern const char mapLaserPlayerBottom[];
+
+extern const char mapEnemyLaser[];
+extern const char mapEnemyLaserSide[];
+extern const char mapEnemyLaserCornerLeft[];
+extern const char mapEnemyLaserCornerRight[];
 
 void PrintVerticalPROGMEM(u8, u8, const char *);
 void PrintVerticalRAM(u8, u8, const char *);

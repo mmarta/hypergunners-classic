@@ -41,6 +41,27 @@ int main() {
             }
         }
 
+        i = ENEMY_LASER_COUNT;
+        while(i--) {
+            j = 0;
+            while(j < PLAYER_COUNT) {
+                k = 0;
+                while(k < PLAYER_LASER_COUNT) {
+                    CollisionLasers(&players[j].lasers[k], &enemyLasers[i]);
+                    k++;
+                }
+
+                k = 0;
+                while(k < PLAYER_EXTRA_LASER_COUNT) {
+                    CollisionLasers(&players[j].extraLasers[k], &enemyLasers[i]);
+                    k++;
+                }
+
+                CollisionWhiplineLaser(&players[j].whipline, &enemyLasers[i]);
+                j++;
+            }
+        }
+
         ReadControls();
         PlayerInput(&players[0]);
 
@@ -49,6 +70,12 @@ int main() {
         }
 
         BackgroundUpdate();
+
+        i = ENEMY_LASER_COUNT;
+        while(i--) {
+            EnemyLaserUpdate(&enemyLasers[i]);
+        }
+
         i = ENEMY_COUNT;
         while(i--) {
             EnemyUpdate(&enemies[i]);
