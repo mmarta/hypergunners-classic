@@ -37,6 +37,8 @@ int main() {
                 }
 
                 CollisionWhiplineEnemy(&players[j].whipline, &enemies[i], &players[j]);
+
+                CollisionPlayerEnemy(&players[j], &enemies[i]);
                 j++;
             }
         }
@@ -58,6 +60,8 @@ int main() {
                 }
 
                 CollisionWhiplineLaser(&players[j].whipline, &enemyLasers[i]);
+
+                CollisionLaserPlayer(&enemyLasers[i], &players[j]);
                 j++;
             }
         }

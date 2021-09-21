@@ -53,6 +53,30 @@ const char mapPlayer7[] PROGMEM ={
 2,2
 ,0x59,0x5c,0x74,0x77};
 
+#define MAPPLAYEREXPLODE0_WIDTH 2
+#define MAPPLAYEREXPLODE0_HEIGHT 2
+const char mapPlayerExplode0[] PROGMEM ={
+2,2
+,0x5d,0x5e,0x78,0x79};
+
+#define MAPPLAYEREXPLODE1_WIDTH 2
+#define MAPPLAYEREXPLODE1_HEIGHT 2
+const char mapPlayerExplode1[] PROGMEM ={
+2,2
+,0x5f,0x60,0x7a,0x7b};
+
+#define MAPPLAYEREXPLODE2_WIDTH 2
+#define MAPPLAYEREXPLODE2_HEIGHT 2
+const char mapPlayerExplode2[] PROGMEM ={
+2,2
+,0x61,0x62,0x7c,0x7d};
+
+#define MAPPLAYEREXPLODE3_WIDTH 2
+#define MAPPLAYEREXPLODE3_HEIGHT 2
+const char mapPlayerExplode3[] PROGMEM ={
+2,2
+,0x63,0x64,0x7e,0x7f};
+
 #define MAPPLAYERHALFCLAWLEFT_WIDTH 2
 #define MAPPLAYERHALFCLAWLEFT_HEIGHT 1
 const char mapPlayerHalfClawLeft[] PROGMEM ={

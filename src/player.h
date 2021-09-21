@@ -19,7 +19,7 @@
 typedef struct {
     u8 lane, x, y, active, animTime, killTime, index, destY, clawTime, scoreDelta;
     u8 fireButton, whipButton, leftStick, rightStick, superWeaponSeconds, timeOut;
-    u8 superWeaponY, superWeaponFireTimer;
+    u8 superWeaponY, superWeaponFireTimer, lives;
     u16 score;
     Laser lasers[PLAYER_LASER_COUNT];
     Laser extraLasers[PLAYER_EXTRA_LASER_COUNT];
@@ -30,6 +30,8 @@ extern Player players[];
 
 void PlayerInit(Player *, u8);
 u8 PlayerIsControllable(Player *);
+u8 PlayerIsCollidable(Player *);
+void PlayerKill(Player *);
 void PlayerInput(Player *);
 void PlayerUpdate(Player *);
 

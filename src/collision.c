@@ -55,3 +55,31 @@ void CollisionWhiplineLaser(Whipline *whipline, Laser *enemyLaser) {
         WhiplineDeactivate(whipline);
     }
 }
+
+void CollisionLaserPlayer(Laser *enemyLaser, Player *player) {
+    if(!PlayerIsCollidable(player) || !enemyLaser->active) {
+        return;
+    }
+
+    if(
+        player->x < enemyLaser->x + 2
+        && player->y < LASER_H + enemyLaser->y && enemyLaser->y < PLAYER_SIZE + player->y
+    ) {
+        PlayerKill(player);
+    }
+}
+
+void CollisionPlayerEnemy(Player *player, Enemy *enemy) {
+    if(!PlayerIsCollidable(player) || !EnemyIsCollidable(enemy)) {
+        return;
+    }
+
+    if(
+        player->x < ENEMY_SIZE + enemy->x && enemy->x < PLAYER_SIZE + player->x
+        && player->y < ENEMY_SIZE + enemy->y && enemy->y < PLAYER_SIZE + player->y
+    ) {
+        PlayerKill(player);
+        EnemyKill(enemy);
+        player->scoreDelta += enemy->score;
+    }
+}

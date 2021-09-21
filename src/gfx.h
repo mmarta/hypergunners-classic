@@ -8,6 +8,7 @@
 extern const char gfxTiles[];
 
 extern const char *mapPlayer[];
+extern const char *mapPlayerExplode[];
 extern const char *mapWhipline[];
 extern const char *mapEnemy[];
 extern const char *mapEnemyPre[];

@@ -13,6 +13,13 @@ const char *mapPlayer[] = {
     mapPlayer7
 };
 
+const char *mapPlayerExplode[] = {
+    mapPlayerExplode0,
+    mapPlayerExplode1,
+    mapPlayerExplode2,
+    mapPlayerExplode3
+};
+
 const char *mapWhipline[] = {
     mapWhipline0,
     mapWhipline1,

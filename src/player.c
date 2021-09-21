@@ -27,6 +27,8 @@ void PlayerInit(Player *player, u8 index) {
 
     player->whipline.usable = 1;
 
+    player->lives = 3;
+
     if(index) {
         PrintVerticalRAM(0, 4, "2P");
         PrintU16Vertical(1, 0, player->score, 50000, 1);
@@ -37,7 +39,12 @@ void PlayerInit(Player *player, u8 index) {
 }
 
 u8 PlayerIsControllable(Player *player) {
-    return player->active && !player->clawTime && !player->whipline.active;
+    return player->active && !player->clawTime && !player->whipline.active
+        && (player->killTime == 0 || player->killTime >= 68);
+}
+
+u8 PlayerIsCollidable(Player *player) {
+    return player->active && !player->killTime;
 }
 
 void PlayerInput(Player *player) {
@@ -149,10 +156,17 @@ void PlayerUpdateClaw(Player *player) {
     }
 }
 
+void PlayerKill(Player *player) {
+    player->killTime = 1;
+    player->clawTime = 0;
+}
+
 void PlayerUpdate(Player *player) {
     if(!player->active) {
         return;
     }
+
+    // Laser updates
 
     u8 i = 0;
     while(i < PLAYER_LASER_COUNT) {
@@ -164,6 +178,42 @@ void PlayerUpdate(Player *player) {
     while(i < PLAYER_EXTRA_LASER_COUNT) {
         LaserUpdate(&player->extraLasers[i]);
         i++;
+    }
+
+    // Is player dying?
+    if(player->killTime) {
+        if(player->killTime <= 17) {
+            switch(player->killTime) {
+                case 1:
+                case 5:
+                case 9:
+                case 13:
+                    PlayerDraw(player);
+                    break;
+                case 17:
+                    Fill(player->x, player->y, PLAYER_SIZE, PLAYER_SIZE, 0);
+
+            }
+        } else if(player->killTime >= 68) {
+            if(player->killTime == 68) {
+                player->lane = 4;
+                player->y = ((8 - player->lane) * 3) + 1;
+                player->lives--;
+            }
+
+            switch(player->killTime % 4) {
+                case 0:
+                    PlayerDraw(player);
+                    break;
+                case 2:
+                    Fill(player->x, player->y, PLAYER_SIZE, PLAYER_SIZE, 0);
+            }
+        }
+
+        player->killTime++;
+        if(player->killTime <= 68) {
+            return;
+        }
     }
 
     if(WhiplineUpdate(&player->whipline)) {
@@ -219,17 +269,25 @@ void PlayerUpdate(Player *player) {
         }
     }
 
-    switch(player->animTime) {
-        case 0:
-        case 3:
-        case 6:
-        case 9:
-            PlayerDraw(player);
+    // Draw (normal)
+    if(!player->killTime) {
+        switch(player->animTime) {
+            case 0:
+            case 3:
+            case 6:
+            case 9:
+                PlayerDraw(player);
+        }
     }
 }
 
 void PlayerDraw(Player *player) {
     u8 mapIndex = player->index ? 4 : 0;
+
+    if(player->killTime > 0 && player->killTime < 17) {
+        DrawMap(player->x, player->y, mapPlayerExplode[player->killTime / 4]);
+        return;
+    }
 
     if(player->animTime < 3) {
         DrawMap(player->x, player->y, mapPlayer[mapIndex + 1]);

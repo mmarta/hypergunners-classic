@@ -14,5 +14,6 @@ typedef struct {
 void WhiplineInit(Whipline *, u8);
 u8 WhiplineIsCollidable(Whipline *);
 u8 WhiplineUpdate(Whipline *);
+void WhiplineDeactivate(Whipline *);
 
 #endif

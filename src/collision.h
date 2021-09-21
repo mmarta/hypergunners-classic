@@ -11,5 +11,7 @@ void CollisionLaserEnemy(Laser *, Enemy *, Player *);
 void CollisionLasers(Laser *, Laser *);
 void CollisionWhiplineEnemy(Whipline *, Enemy *, Player *);
 void CollisionWhiplineLaser(Whipline *, Laser *);
+void CollisionLaserPlayer(Laser *, Player *);
+void CollisionPlayerEnemy(Player *, Enemy *);
 
 #endif

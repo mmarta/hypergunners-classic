@@ -13,6 +13,11 @@
             <map var-name="mapPlayer6" left="12" top="3" width="2" height="2" />
             <map var-name="mapPlayer7" left="14" top="3" width="2" height="2" />
 
+            <map var-name="mapPlayerExplode0" left="16" top="3" width="2" height="2" />
+            <map var-name="mapPlayerExplode1" left="18" top="3" width="2" height="2" />
+            <map var-name="mapPlayerExplode2" left="20" top="3" width="2" height="2" />
+            <map var-name="mapPlayerExplode3" left="22" top="3" width="2" height="2" />
+
             <map var-name="mapPlayerHalfClawLeft" left="24" top="4" width="2" height="1" />
             <map var-name="mapPlayerClawLeft" left="24" top="3" width="2" height="2" />
             <map var-name="mapPlayerHalfClawRight" left="26" top="3" width="2" height="1" />
