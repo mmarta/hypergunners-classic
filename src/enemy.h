@@ -8,7 +8,7 @@
 
 #define ENEMY_SIZE 2
 
-#define ENEMY_COUNT 8
+#define ENEMY_COUNT 10
 
 typedef enum {
     STANDARD

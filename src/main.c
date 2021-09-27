@@ -7,7 +7,7 @@
 #include "collision.h"
 
 int main() {
-    u8 i, j, k;
+    u8 i, j, k, t = 0, playerCollisionCondition;
     srand(GetTrueRandomSeed());
 
     SetTileTable(gfxTiles);
@@ -15,6 +15,7 @@ int main() {
 
     BackgroundInit();
     PlayerInit(&players[0], 0);
+    PlayerInit(&players[1], 1);
 
     while(1) {
         WaitVsync(1);
@@ -23,7 +24,9 @@ int main() {
         i = ENEMY_COUNT;
         while(i--) {
             j = 0;
-            while(j < PLAYER_COUNT) {
+            playerCollisionCondition = t ? j < PLAYER_COUNT : j != 0xff;
+
+            while(playerCollisionCondition) {
                 k = 0;
                 while(k < PLAYER_LASER_COUNT) {
                     CollisionLaserEnemy(&players[j].lasers[k], &enemies[i], &players[j]);
@@ -39,14 +42,23 @@ int main() {
                 CollisionWhiplineEnemy(&players[j].whipline, &enemies[i], &players[j]);
 
                 CollisionPlayerEnemy(&players[j], &enemies[i]);
-                j++;
+
+                if(t) {
+                    j++;
+                    playerCollisionCondition = j < PLAYER_COUNT;
+                } else {
+                    j--;
+                    playerCollisionCondition = j != 0xff;
+                }
             }
         }
 
         i = ENEMY_LASER_COUNT;
         while(i--) {
             j = 0;
-            while(j < PLAYER_COUNT) {
+            playerCollisionCondition = t ? j < PLAYER_COUNT : j != 0xff;
+
+            while(playerCollisionCondition) {
                 k = 0;
                 while(k < PLAYER_LASER_COUNT) {
                     CollisionLasers(&players[j].lasers[k], &enemyLasers[i]);
@@ -62,12 +74,19 @@ int main() {
                 CollisionWhiplineLaser(&players[j].whipline, &enemyLasers[i]);
 
                 CollisionLaserPlayer(&enemyLasers[i], &players[j]);
-                j++;
+                if(t) {
+                    j++;
+                    playerCollisionCondition = j < PLAYER_COUNT;
+                } else {
+                    j--;
+                    playerCollisionCondition = j != 0xff;
+                }
             }
         }
 
         ReadControls();
         PlayerInput(&players[0]);
+        PlayerInput(&players[1]);
 
         if(rand() % 50 == 0) {
             EnemyInitNext();
@@ -84,7 +103,17 @@ int main() {
         while(i--) {
             EnemyUpdate(&enemies[i]);
         }
-        PlayerUpdate(&players[0]);
+
+        if(t) {
+            PlayerUpdate(&players[1]);
+            PlayerUpdate(&players[0]);
+        } else {
+            PlayerUpdate(&players[0]);
+            PlayerUpdate(&players[1]);
+        }
+
+        t++;
+        t = t % 2;
     }
 
     return 0;

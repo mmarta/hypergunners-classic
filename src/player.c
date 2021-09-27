@@ -8,7 +8,7 @@ void PlayerDraw(Player *);
 
 void PlayerInit(Player *player, u8 index) {
     player->index = index;
-    player->lane = 4;
+    player->lane = index ? 6 : 2;
     player->y = ((8 - player->lane) * 3) + 1;
     player->x = PLAYER_X;
 
