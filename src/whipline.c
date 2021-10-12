@@ -9,7 +9,7 @@ void WhiplineInit(Whipline *whipline, u8 lane) {
 
     whipline->lane = lane;
     whipline->x = LANE_BOTTOM_X - 1;
-    whipline->y = (lane * 3) + 1;
+    whipline->y = CALC_Y_FROM_LANE(lane);
     whipline->grabbedTime = 0;
     whipline->updateTime = 0;
     whipline->active = 1;

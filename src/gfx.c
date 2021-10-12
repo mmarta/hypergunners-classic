@@ -33,13 +33,22 @@ const char *mapEnemy[] = {
     mapEnemy2,
     mapEnemy3,
     mapEnemy4,
-    mapEnemy5
+    mapEnemy5,
+    mapEnemy6,
+    mapEnemy7,
+    mapEnemy8,
+    mapEnemySpreader0,
+    mapEnemySpreader1,
+    mapEnemySpreader2
 };
 
 const char *mapEnemyPre[] = {
     mapEnemyPre0,
     mapEnemyPre1,
-    mapEnemyPre2
+    mapEnemyPre2,
+    mapEnemyPre3,
+    mapEnemyPre4,
+    mapEnemyPre5
 };
 
 const char *mapEnemyExplode[] = {

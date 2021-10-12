@@ -3,7 +3,7 @@
 
 #include "defines.h"
 
-#define LASER_TILE_START 200
+#define LASER_TILE_START 222
 
 extern const char gfxTiles[];
 

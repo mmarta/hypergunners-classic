@@ -15,7 +15,7 @@ int main() {
 
     BackgroundInit();
     PlayerInit(&players[0], 0);
-    PlayerInit(&players[1], 1);
+    //PlayerInit(&players[1], 1);
 
     while(1) {
         WaitVsync(1);

@@ -11,7 +11,9 @@
 #define ENEMY_COUNT 10
 
 typedef enum {
-    STANDARD
+    STANDARD,
+    THRUSTER,
+    HAWKEYE
 } EnemyType;
 
 typedef struct {

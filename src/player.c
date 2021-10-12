@@ -9,7 +9,7 @@ void PlayerDraw(Player *);
 void PlayerInit(Player *player, u8 index) {
     player->index = index;
     player->lane = index ? 6 : 2;
-    player->y = ((8 - player->lane) * 3) + 1;
+    player->y = CALC_Y_FROM_LANE(player->lane);
     player->x = PLAYER_X;
 
     player->active = 1;
@@ -54,10 +54,11 @@ void PlayerInput(Player *player) {
 
     if(controls[player->index] & BTN_LEFT) {
         if(!player->leftStick) {
+            player->leftStick = 1;
             if(player->y < 25) {
                 PlayerLaunchClaw(player, player->y + 3);
+                return;
             }
-            player->leftStick = 1;
         }
     } else if(player->leftStick) {
         player->leftStick = 0;
@@ -65,10 +66,11 @@ void PlayerInput(Player *player) {
 
     if(controls[player->index] & BTN_RIGHT) {
         if(!player->rightStick) {
+            player->rightStick = 1;
             if(player->y > 1) {
                 PlayerLaunchClaw(player, player->y - 3);
+                return;
             }
-            player->rightStick = 1;
         }
     } else if(player->rightStick) {
         player->rightStick = 0;
@@ -152,7 +154,7 @@ void PlayerUpdateClaw(Player *player) {
     player->clawTime++;
     if(player->clawTime >= 7) {
         player->clawTime = 0;
-        player->lane = player->lane + (laneUp ? 1 : -1);
+        player->lane = player->lane + (laneUp ? -1 : 1);
     }
 }
 
@@ -162,12 +164,12 @@ void PlayerKill(Player *player) {
 }
 
 void PlayerUpdate(Player *player) {
+    // If the player is inactive, leave.
     if(!player->active) {
         return;
     }
 
     // Laser updates
-
     u8 i = 0;
     while(i < PLAYER_LASER_COUNT) {
         LaserUpdate(&player->lasers[i]);
@@ -178,6 +180,13 @@ void PlayerUpdate(Player *player) {
     while(i < PLAYER_EXTRA_LASER_COUNT) {
         LaserUpdate(&player->extraLasers[i]);
         i++;
+    }
+
+    // Score updates first
+    if(player->scoreDelta) {
+        player->score += player->scoreDelta;
+        PrintU16Vertical(1, player->index ? 0 : 20, player->score, 50000, 1);
+        player->scoreDelta = 0;
     }
 
     // Is player dying?
@@ -197,7 +206,7 @@ void PlayerUpdate(Player *player) {
         } else if(player->killTime >= 68) {
             if(player->killTime == 68) {
                 player->lane = 4;
-                player->y = ((8 - player->lane) * 3) + 1;
+                player->y = CALC_Y_FROM_LANE(player->lane);
                 player->lives--;
             }
 
@@ -248,12 +257,6 @@ void PlayerUpdate(Player *player) {
                 Fill(30, 0, 1, 17, 0);
             }
         }
-    }
-
-    if(player->scoreDelta) {
-        player->score += player->scoreDelta;
-        PrintU16Vertical(1, player->index ? 0 : 20, player->score, 50000, 1);
-        player->scoreDelta = 0;
     }
 
     player->animTime++;

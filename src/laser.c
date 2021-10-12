@@ -89,8 +89,8 @@ void EnemyLaserInit(Laser *laser, u8 x, u8 lane, LaserStyle laserStyle) {
     if(laserStyle == LASER_STYLE_ENEMY_STRAIGHT) {
         laser->x = x;
         laser->startX = x;
-        laser->y = (lane * 3) + 1;
         laser->lane = lane;
+        laser->y = CALC_Y_FROM_LANE(lane);
         laser->time = 0;
         DrawMap(laser->x, laser->y, mapEnemyLaser);
     }

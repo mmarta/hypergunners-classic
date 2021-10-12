@@ -10,4 +10,6 @@
 #define END_POINT_X 17
 #define LANE_BOTTOM_X 28
 
+#define CALC_Y_FROM_LANE(lane) (((8 - lane) * 3) + 1)
+
 #endif
