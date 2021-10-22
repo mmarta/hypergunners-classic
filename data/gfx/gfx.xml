@@ -36,25 +36,30 @@
             <map var-name="mapEnemy4" left="8" top="7" width="2" height="2" />
             <map var-name="mapEnemy5" left="10" top="7" width="2" height="2" />
 
-            <map var-name="mapEnemy6" left="18" top="9" width="2" height="2" />
-            <map var-name="mapEnemy7" left="20" top="9" width="2" height="2" />
-            <map var-name="mapEnemy8" left="22" top="9" width="2" height="2" />
+            <map var-name="mapEnemy6" left="6" top="9" width="2" height="2" />
+            <map var-name="mapEnemy7" left="8" top="9" width="2" height="2" />
+            <map var-name="mapEnemy8" left="10" top="9" width="2" height="2" />
 
-            <map var-name="mapEnemySpreader0" left="30" top="9" width="2" height="2" />
-            <map var-name="mapEnemySpreader1" left="0" top="11" width="2" height="2" />
-            <map var-name="mapEnemySpreader2" left="2" top="11" width="2" height="2" />
+            <map var-name="mapEnemySpreader0" left="18" top="9" width="2" height="2" />
+            <map var-name="mapEnemySpreader1" left="20" top="9" width="2" height="2" />
+            <map var-name="mapEnemySpreader2" left="22" top="9" width="2" height="2" />
+
+            <map var-name="mapEnemyBola0" left="24" top="9" width="2" height="2" />
+            <map var-name="mapEnemyBola1" left="26" top="9" width="2" height="2" />
+            <map var-name="mapEnemyBola2" left="28" top="9" width="2" height="2" />
+            <map var-name="mapEnemyBola3" left="30" top="9" width="2" height="2" />
 
             <map var-name="mapEnemyPre0" left="12" top="7" width="2" height="2" />
             <map var-name="mapEnemyPre1" left="14" top="7" width="2" height="2" />
             <map var-name="mapEnemyPre2" left="16" top="7" width="2" height="2" />
-            <map var-name="mapEnemyPre3" left="24" top="9" width="2" height="2" />
-            <map var-name="mapEnemyPre4" left="26" top="9" width="2" height="2" />
-            <map var-name="mapEnemyPre5" left="28" top="9" width="2" height="2" />
+            <map var-name="mapEnemyPre3" left="12" top="9" width="2" height="2" />
+            <map var-name="mapEnemyPre4" left="14" top="9" width="2" height="2" />
+            <map var-name="mapEnemyPre5" left="16" top="9" width="2" height="2" />
 
-            <map var-name="mapEnemyLaser" left="10" top="9" width="1" height="2" />
-            <map var-name="mapEnemyLaserSide" left="12" top="9" width="2" height="1" />
-            <map var-name="mapEnemyLaserCornerLeft" left="14" top="9" width="2" height="2" />
-            <map var-name="mapEnemyLaserCornerRight" left="16" top="9" width="2" height="2" />
+            <map var-name="mapEnemyLaser" left="30" top="7" width="1" height="2" />
+            <map var-name="mapEnemyLaserSide" left="0" top="9" width="2" height="1" />
+            <map var-name="mapEnemyLaserCornerLeft" left="2" top="9" width="2" height="2" />
+            <map var-name="mapEnemyLaserCornerRight" left="4" top="9" width="2" height="2" />
 
             <map var-name="mapEnemyExplode0" left="22" top="7" width="2" height="2" />
             <map var-name="mapEnemyExplode1" left="24" top="7" width="2" height="2" />

@@ -6,6 +6,8 @@ void EnemyInit(Enemy *);
 void EnemyFire(Enemy *);
 void EnemyDraw(Enemy *);
 void EnemyDeactivate(Enemy *);
+void EnemyUpdateHawkeye(Enemy *);
+void EnemyUpdateBola(Enemy *);
 
 void EnemyInitNext() {
     u8 i = ENEMY_COUNT;
@@ -19,7 +21,7 @@ void EnemyInitNext() {
 
 void EnemyInit(Enemy *enemy) {
     u8 i = 0;
-    enemy->type = rand() % 3;
+    enemy->type = rand() % 4;
 
     if(enemy->type == HAWKEYE) {
         enemy->lane = (rand() % 7) + 1;
@@ -51,6 +53,10 @@ void EnemyInit(Enemy *enemy) {
         case HAWKEYE:
             enemy->score = 0;
             enemy->x -= 6;
+            enemy->preTime = 0;
+            break;
+        case BOLA:
+            enemy->score= 4;
             enemy->preTime = 0;
             break;
         case THRUSTER:
@@ -95,29 +101,59 @@ void EnemyKill(Enemy *enemy) {
 }
 
 void EnemyUpdateHawkeye(Enemy *enemy) {
-    u8 modTime;
+    u8 modTime = enemy->moveTime % 4;
 
-    enemy->animTime++;
-    modTime = enemy->animTime % 4;
-    if(enemy->animTime < 30) {
+    if(enemy->moveTime < 30) {
         if(!modTime) {
             EnemyDraw(enemy);
         } else if(modTime == 2) {
             Fill(enemy->x, enemy->y, ENEMY_SIZE, ENEMY_SIZE, 0);
         }
-    } else if(enemy->animTime == 90) {
+    } else if(enemy->moveTime == 90) {
         EnemyFire(enemy);
-    } else if(enemy->animTime >= 200) {
+    } else if(enemy->moveTime >= 200) {
         EnemyDeactivate(enemy);
+    } else if(enemy->animTime % 2 == 0) {
+        EnemyDraw(enemy);
+    }
+}
+
+void EnemyUpdateBola(Enemy *enemy) {
+    u8 modTime;
+
+    enemy->moveTime++;
+    modTime = enemy->animTime % 4;
+
+    if(enemy->x == LANE_BOTTOM_X - 1) {
+        EnemyDeactivate(enemy);
+        return;
+    } else if(enemy->x == END_POINT_X) {
+        if(enemy->moveTime < 120) {
+            if(!modTime) {
+                EnemyDraw(enemy);
+            }
+        } else if(enemy->moveTime == 120) {
+            Fill(enemy->x, enemy->y, ENEMY_SIZE, ENEMY_SIZE, 0);
+            enemy->x++;
+            EnemyDraw(enemy);
+        }
+    } else if(modTime == 0 || modTime == 2) {
+        Fill(enemy->x, enemy->y, ENEMY_SIZE, ENEMY_SIZE, 0);
+        enemy->x++;
+        EnemyDraw(enemy);
     }
 }
 
 void EnemyUpdate(Enemy *enemy) {
-    u8 moveTime = 30;
+    u8 moveTime = 30, animTime = 12;
     if(enemy->type == THRUSTER) {
         moveTime = 12;
-    } else if(enemy->type == HAWKEYE) {
+    } else if(enemy->type == HAWKEYE || enemy->type == BOLA) {
         moveTime = 0;
+    }
+
+    if(enemy->type == BOLA) {
+        animTime = 16;
     }
 
     if(!enemy->active) {
@@ -157,26 +193,15 @@ void EnemyUpdate(Enemy *enemy) {
     }
 
     enemy->animTime++;
-    if(enemy->animTime >= 12) {
+    if(enemy->animTime >= animTime) {
         enemy->animTime = 0;
     }
 
     enemy->moveTime++;
     if(enemy->type == HAWKEYE) {
-        u8 modTime = enemy->moveTime % 4;
-        if(enemy->moveTime < 30) {
-            if(!modTime) {
-                EnemyDraw(enemy);
-            } else if(modTime == 2) {
-                Fill(enemy->x, enemy->y, ENEMY_SIZE, ENEMY_SIZE, 0);
-            }
-        } else if(enemy->moveTime == 90) {
-            EnemyFire(enemy);
-        } else if(enemy->moveTime >= 200) {
-            EnemyDeactivate(enemy);
-        } else if(enemy->animTime % 2 == 0) {
-            EnemyDraw(enemy);
-        }
+        EnemyUpdateHawkeye(enemy);
+    } else if(enemy->type == BOLA) {
+        EnemyUpdateBola(enemy);
     } else {
         if(enemy->currentLaser && !enemy->currentLaser->active) {
             enemy->currentLaser = NULL;
@@ -240,6 +265,8 @@ void EnemyDraw(Enemy *enemy) {
         DrawMap(enemy->x, enemy->y, mapEnemy[(enemy->animTime >> 2) + 9]);
     } else if(enemy->type == THRUSTER) {
         DrawMap(enemy->x, enemy->y, mapEnemy[(enemy->animTime >> 2) + 6]);
+    } else if(enemy->type == BOLA) {
+        DrawMap(enemy->x, enemy->y, mapEnemy[(enemy->animTime >> 2) + 12]);
     } else {
         DrawMap(enemy->x, enemy->y, mapEnemy[enemy->animTime >> 1]);
     }

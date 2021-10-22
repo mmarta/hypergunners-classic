@@ -13,7 +13,8 @@
 typedef enum {
     STANDARD,
     THRUSTER,
-    HAWKEYE
+    HAWKEYE,
+    BOLA
 } EnemyType;
 
 typedef struct {

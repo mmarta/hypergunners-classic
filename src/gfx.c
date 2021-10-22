@@ -39,7 +39,11 @@ const char *mapEnemy[] = {
     mapEnemy8,
     mapEnemySpreader0,
     mapEnemySpreader1,
-    mapEnemySpreader2
+    mapEnemySpreader2,
+    mapEnemyBola0,
+    mapEnemyBola1,
+    mapEnemyBola2,
+    mapEnemyBola3
 };
 
 const char *mapEnemyPre[] = {

@@ -17,6 +17,11 @@ int main() {
     PlayerInit(&players[0], 0);
     //PlayerInit(&players[1], 1);
 
+    // DEBUG CODE FOR REORDINGS
+    do {
+        ReadControls();
+    } while(!(controls[0] & BTN_DOWN));
+
     while(1) {
         WaitVsync(1);
 
