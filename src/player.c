@@ -27,6 +27,10 @@ void PlayerInit(Player *player, u8 index) {
 
     player->whipline.usable = 1;
 
+    player->chainCount = 0;
+    player->hitTimer = 0;
+    player->chainClearTimer = 0;
+
     player->lives = 3;
 
     if(index) {
@@ -158,9 +162,41 @@ void PlayerUpdateClaw(Player *player) {
     }
 }
 
+
+void PlayerAddScore(Player *player, u8 score, u8 isChainable) {
+    player->scoreDelta += score;
+    if(isChainable && player->chainCount < 250) {
+        player->hitTimer = 60;
+        player->chainCount++;
+        if(player->chainCount == 2) {
+            player->chainClearTimer = 0;
+            PrintVerticalRAM(31, player->index ? 8 : 27, "CHAIN ");
+        }
+
+        if(player->chainCount >= 2) {
+            PrintU8Vertical(31,  player->index ? 0 : 19, player->chainCount);
+        }
+    }
+}
+
 void PlayerKill(Player *player) {
     player->killTime = 1;
-    player->clawTime = 0;
+    if(player->clawTime) {
+        if(player->destY < player->y) {
+            Fill(player->x, player->y - 3, PLAYER_SIZE, 5, 0);
+        } else {
+            Fill(player->x, player->y, PLAYER_SIZE, 5, 0);
+        }
+        player->clawTime = 0;
+    }
+
+    player->chainCount = 0;
+    player->hitTimer = 0;
+    player->chainClearTimer = 0;
+    player->superWeaponFireTimer = 0;
+    player->superWeaponSeconds = 0;
+    player->whipline.usable = 1;
+    Fill(30, player->index ? 0 : 17, 2, 11, 0);
 }
 
 void PlayerUpdate(Player *player) {
@@ -228,8 +264,28 @@ void PlayerUpdate(Player *player) {
     if(WhiplineUpdate(&player->whipline)) {
         player->superWeaponSeconds = PLAYER_SUPER_WEAPON_MAX_SECONDS;
         player->timeOut = 60;
-        PrintVerticalRAM(30, 16, "MULTI GUN TIME");
-        PrintU8Vertical(30, 0, player->superWeaponSeconds);
+        PrintVerticalRAM(30, player->index ? 10 : 27, "GUN TIME");
+        PrintU8Vertical(30, player->index ? 0 : 17, player->superWeaponSeconds);
+    }
+
+    if(player->hitTimer) {
+        player->hitTimer--;
+        if(!player->hitTimer) {
+            if(player->chainCount >= 2) {
+                Fill(31, player->index ? 0 : 19, 1, 9, 0);
+                PrintU16Vertical(31, player->index ? 0 : 19, player->chainCount << 2, 50000, 1);
+                PlayerAddScore(player, player->chainCount << 2, 0);
+                player->chainClearTimer = 60;
+            }
+            player->chainCount = 0;
+        }
+    }
+
+    if(player->chainClearTimer) {
+        player->chainClearTimer--;
+        if(!player->chainClearTimer) {
+            Fill(31, player->index ? 0 : 19, 1, 9, 0);
+        }
     }
 
     if(player->superWeaponFireTimer == 1 && !player->extraLasers[0].active && !player->extraLasers[1].active) {
@@ -251,10 +307,10 @@ void PlayerUpdate(Player *player) {
         if(!player->timeOut){
             player->superWeaponSeconds--;
             if(player->superWeaponSeconds) {
-                PrintU8Vertical(30, 0, player->superWeaponSeconds);
+                PrintU8Vertical(30, player->index ? 0 : 17, player->superWeaponSeconds);
                 player->timeOut = 60;
             } else {
-                Fill(30, 0, 1, 17, 0);
+                Fill(30, player->index ? 0 : 17, 1, 11, 0);
             }
         }
     }

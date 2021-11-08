@@ -113,7 +113,7 @@ void EnemyLaserUpdate(Laser *laser) {
             return;
         } else if(laser->time + (laser->x - laser->startX + 1) >= ENEMY_LASER_STOP_TIME) {
             Fill(laser->x - (ENEMY_LASER_STOP_TIME - laser->time), laser->y, LASER_W, LASER_H, 0);
-        } else if(laser->time % 4 == 0) {
+        } else {
             drawIndex = laser->startX;
             while(drawIndex <= laser->x){
                 DrawMap(drawIndex, laser->y, mapEnemyLaser);
@@ -123,7 +123,12 @@ void EnemyLaserUpdate(Laser *laser) {
     } else {
         if(!laser->skipFrame) {
             laser->x++;
-            DrawMap(laser->x, laser->y, mapEnemyLaser);
+        }
+
+        drawIndex = laser->startX;
+        while(drawIndex <= laser->x){
+            DrawMap(drawIndex, laser->y, mapEnemyLaser);
+            drawIndex++;
         }
 
         laser->skipFrame++;
