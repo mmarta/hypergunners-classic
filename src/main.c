@@ -5,6 +5,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "collision.h"
+#include "game.h"
 
 int main() {
     u8 i, j, k, t = 0, playerCollisionCondition;
@@ -16,6 +17,8 @@ int main() {
     BackgroundInit();
     PlayerInit(&players[0], 0);
     //PlayerInit(&players[1], 1);
+
+    GameReset();
 
     // DEBUG CODE FOR REORDINGS
     do {
@@ -93,11 +96,11 @@ int main() {
         PlayerInput(&players[0]);
         PlayerInput(&players[1]);
 
-        if(rand() % 50 == 0) {
-            EnemyInitNext();
-        }
+        // Update spawn time and see if we generate a new enemy
+        GameSpawnUpdate();
 
         BackgroundUpdate();
+        GameUpdateRank();
 
         i = ENEMY_LASER_COUNT;
         while(i--) {

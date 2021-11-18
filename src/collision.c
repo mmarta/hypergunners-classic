@@ -12,6 +12,7 @@ void CollisionLaserEnemy(Laser *laser, Enemy *enemy, Player *player) {
         LaserDeactivate(laser);
         EnemyKill(enemy);
         PlayerAddScore(player, enemy->score, 1);
+        GameAddKill();
     }
 }
 
@@ -27,6 +28,7 @@ void CollisionWhiplineEnemy(Whipline *whipline, Enemy *enemy, Player *player) {
         whipline->grabbedTime = 1;
         EnemyKill(enemy);
         PlayerAddScore(player, enemy->score << 2, 0);
+        GameAddKill();
     }
 }
 
@@ -66,6 +68,7 @@ void CollisionLaserPlayer(Laser *enemyLaser, Player *player) {
         && player->y < LASER_H + enemyLaser->y && enemyLaser->y < PLAYER_SIZE + player->y
     ) {
         PlayerKill(player);
+        GameDropRank();
     }
 }
 
@@ -81,5 +84,6 @@ void CollisionPlayerEnemy(Player *player, Enemy *enemy) {
         PlayerKill(player);
         EnemyKill(enemy);
         PlayerAddScore(player, enemy->score, 0);
+        GameDropRank();
     }
 }

@@ -2,26 +2,29 @@
 
 Enemy enemies[ENEMY_COUNT];
 
-void EnemyInit(Enemy *);
+void EnemyInit(Enemy *, EnemyType);
 void EnemyFire(Enemy *);
 void EnemyDraw(Enemy *);
 void EnemyDeactivate(Enemy *);
 void EnemyUpdateHawkeye(Enemy *);
 void EnemyUpdateBola(Enemy *);
 
-void EnemyInitNext() {
+void EnemyInitNext(u8 weight) {
     u8 i = ENEMY_COUNT;
     while(i--) {
         if(!enemies[i].active) {
-            EnemyInit(&enemies[i]);
+            // Use weight to figure out type
+            EnemyType weightedType = rand() % 4; // Random is placeholder
+
+            EnemyInit(&enemies[i], weightedType);
             return;
         }
     }
 }
 
-void EnemyInit(Enemy *enemy) {
+void EnemyInit(Enemy *enemy, EnemyType t) {
     u8 i = 0;
-    enemy->type = rand() % 4;
+    enemy->type = t;
 
     if(enemy->type == HAWKEYE) {
         enemy->lane = (rand() % 7) + 1;

@@ -272,9 +272,20 @@ void PlayerUpdate(Player *player) {
         player->hitTimer--;
         if(!player->hitTimer) {
             if(player->chainCount >= 2) {
+                u8 multFactor = 2;
+                if(player->chainCount >= 20) {
+                    multFactor = 6;
+                } else if(player->chainCount >= 15) {
+                    multFactor = 5;
+                } else if(player->chainCount >= 10) {
+                    multFactor = 4;
+                } else if(player->chainCount >= 5) {
+                    multFactor = 3;
+                }
+
                 Fill(31, player->index ? 0 : 19, 1, 9, 0);
-                PrintU16Vertical(31, player->index ? 0 : 19, player->chainCount << 2, 50000, 1);
-                PlayerAddScore(player, player->chainCount << 2, 0);
+                PrintU16Vertical(31, player->index ? 0 : 19, player->chainCount << multFactor, 50000, 1);
+                PlayerAddScore(player, player->chainCount << multFactor, 0);
                 player->chainClearTimer = 60;
             }
             player->chainCount = 0;

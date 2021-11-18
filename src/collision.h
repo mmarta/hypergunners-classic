@@ -6,6 +6,7 @@
 #include "whipline.h"
 #include "player.h"
 #include "enemy.h"
+#include "game.h"
 
 void CollisionLaserEnemy(Laser *, Enemy *, Player *);
 void CollisionLasers(Laser *, Laser *);

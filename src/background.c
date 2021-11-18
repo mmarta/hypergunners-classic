@@ -43,6 +43,9 @@ void BackgroundStarsAnimate() {
             break;
         case 16:
             tile = BACKGROUND_STAR_TILE_START;
+            break;
+        default:
+            return;
     }
 
     i = 0;
