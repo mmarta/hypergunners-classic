@@ -6,6 +6,11 @@
 #include "player.h"
 #include "enemy.h"
 
+#define SPAWN_CONSTANT 20
+#define SPAWN_MIN_FACTOR 10
+#define SPAWN_MAX_FACTOR 50
+#define SPAWN_FACTOR_DELTA 5
+
 // Rank items
 extern u8 gameLevel, gameFourSecondKills, gameKillTime, gameEnemyNextSpawnTime;
 extern u8 gameEnemySpawnWeight;

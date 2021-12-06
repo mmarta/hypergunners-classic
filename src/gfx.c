@@ -27,32 +27,55 @@ const char *mapWhipline[] = {
     mapWhipline3
 };
 
-const char *mapEnemy[] = {
-    mapEnemy0,
-    mapEnemy1,
-    mapEnemy2,
-    mapEnemy3,
-    mapEnemy4,
-    mapEnemy5,
-    mapEnemy6,
-    mapEnemy7,
-    mapEnemy8,
-    mapEnemySpreader0,
-    mapEnemySpreader1,
-    mapEnemySpreader2,
+const char *mapEnemyStandard[] = {
+    mapEnemyStandard0,
+    mapEnemyStandard1,
+    mapEnemyStandard2,
+    mapEnemyStandard3,
+    mapEnemyStandard4,
+    mapEnemyStandard5
+};
+
+const char *mapEnemyStandardFar[] = {
+    mapEnemyStandardFar0,
+    mapEnemyStandardFar1,
+    mapEnemyStandardFar2
+};
+
+const char *mapEnemyStandardPre[] = {
+    mapEnemyStandardPre0,
+    mapEnemyStandardPre1,
+    mapEnemyStandardPre2
+};
+
+const char *mapEnemyThruster[] = {
+    mapEnemyThruster0,
+    mapEnemyThruster1,
+    mapEnemyThruster2
+};
+
+const char *mapEnemyThrusterFar[] = {
+    mapEnemyThrusterFar0,
+    mapEnemyThrusterFar1
+};
+
+const char *mapEnemyThrusterPre[] = {
+    mapEnemyThrusterPre0,
+    mapEnemyThrusterPre1,
+    mapEnemyThrusterPre2
+};
+
+const char *mapEnemyHawkeye[] = {
+    mapEnemyHawkeye0,
+    mapEnemyHawkeye1,
+    mapEnemyHawkeye2
+};
+
+const char *mapEnemyBola[] = {
     mapEnemyBola0,
     mapEnemyBola1,
     mapEnemyBola2,
     mapEnemyBola3
-};
-
-const char *mapEnemyPre[] = {
-    mapEnemyPre0,
-    mapEnemyPre1,
-    mapEnemyPre2,
-    mapEnemyPre3,
-    mapEnemyPre4,
-    mapEnemyPre5
 };
 
 const char *mapEnemyExplode[] = {

@@ -273,13 +273,9 @@ void PlayerUpdate(Player *player) {
         if(!player->hitTimer) {
             if(player->chainCount >= 2) {
                 u8 multFactor = 2;
-                if(player->chainCount >= 20) {
-                    multFactor = 6;
-                } else if(player->chainCount >= 15) {
-                    multFactor = 5;
-                } else if(player->chainCount >= 10) {
+                if(player->chainCount >= 8) {
                     multFactor = 4;
-                } else if(player->chainCount >= 5) {
+                } else if(player->chainCount >= 4) {
                     multFactor = 3;
                 }
 
@@ -300,11 +296,11 @@ void PlayerUpdate(Player *player) {
     }
 
     if(player->superWeaponFireTimer == 1 && !player->extraLasers[0].active && !player->extraLasers[1].active) {
-        if(player->y > 1) {
+        if(player->y >= 4) {
             LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->superWeaponY - 3);
         }
 
-        if(player->y < 25) {
+        if(player->y <= 22) {
             LaserFireNext(player->extraLasers, PLAYER_EXTRA_LASER_COUNT, player->x - 1, player->superWeaponY + 3);
         }
     }

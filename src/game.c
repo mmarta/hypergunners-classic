@@ -1,18 +1,23 @@
 #include "game.h"
 
 u8 gameLevel, gameSecondKills, gameKillTime, gameEnemyNextSpawnTime, gamePreviousKills;
-u8 gameEnemySpawnWeight, gameEnemyNextSpawnFactor, gameLevelSeconds, gameLevelTick;
+u8 gameEnemyNextSpawnFactor, gameLevelSeconds, gameLevelTick, gameLevelUpTime;
 
 void GameReset() {
     gameLevel = 1;
     gameSecondKills = 0;
     gamePreviousKills = 4;
     gameKillTime = 0;
-    gameEnemyNextSpawnFactor = 50;
-    gameEnemyNextSpawnTime = rand() % 30 + gameEnemyNextSpawnFactor;
-    gameEnemySpawnWeight = 0;
+    gameEnemyNextSpawnFactor = SPAWN_MAX_FACTOR;
+    gameEnemyNextSpawnTime = rand() % SPAWN_CONSTANT + gameEnemyNextSpawnFactor;
     gameLevelSeconds = 30;
     gameLevelTick = 60;
+
+    PrintVerticalRAM(2, 18, "LEVEL");
+    PrintU8Vertical(2, 9, gameLevel);
+
+    PrintVerticalRAM(3, 17, "TIME");
+    PrintU8Vertical(3, 10, gameLevelSeconds);
 }
 
 void GameAddKill() {
@@ -25,36 +30,51 @@ void GameUpdateRank() {
         gameKillTime = 0;
         // PLACEHOLDER: Other rank calculations
         if(gameSecondKills > gamePreviousKills) {
-            gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor > 10
-                ? gameEnemyNextSpawnFactor - 5
-                : 20;
+            gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor > SPAWN_MIN_FACTOR
+                ? gameEnemyNextSpawnFactor - SPAWN_FACTOR_DELTA
+                : SPAWN_MIN_FACTOR;
         } else if(gameSecondKills < gamePreviousKills >> 1) {
-            gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor < 100
-                ? gameEnemyNextSpawnFactor + 5
-                : 100;
+            gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor < SPAWN_MAX_FACTOR
+                ? gameEnemyNextSpawnFactor + SPAWN_FACTOR_DELTA
+                : SPAWN_MAX_FACTOR;
         }
 
         gamePreviousKills = gameSecondKills;
         gameSecondKills = 0;
-        PrintU8Vertical(2, 25, gameLevel);
         PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
-        PrintU8Vertical(4, 25, gameEnemySpawnWeight);
-        PrintU8Vertical(5, 25, gamePreviousKills);
+        PrintU8Vertical(4, 25, gamePreviousKills);
     }
 
     gameLevelTick--;
     if(!gameLevelTick) {
         gameLevelSeconds--;
+        PrintU8Vertical(3, 10, gameLevelSeconds);
+
         if(!gameLevelSeconds) {
-            gameLevel++;
-            gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor > 20 ? gameEnemyNextSpawnFactor - 5 : 20;
-            PrintU8Vertical(2, 25, gameLevel);
+            if(gameLevel < 255) {
+                gameLevel++;
+                gameLevelUpTime = 180;
+
+                PrintU8Vertical(2, 9, gameLevel);
+            }
+
+            gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor > SPAWN_MIN_FACTOR
+                ? gameEnemyNextSpawnFactor - SPAWN_FACTOR_DELTA
+                : SPAWN_MIN_FACTOR;
             PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
-            PrintU8Vertical(4, 25, gameEnemySpawnWeight);
-            PrintU8Vertical(5, 25, gamePreviousKills);
+            PrintU8Vertical(4, 25, gamePreviousKills);
             gameLevelSeconds = 30;
         }
         gameLevelTick = 60;
+    }
+
+    if(gameLevelUpTime) {
+        if(gameLevelUpTime % 60 == 0) {
+            PrintVerticalRAM(6, 18, "LEVEL UP!!");
+        } else if(gameLevelUpTime % 60 == 30) {
+            Fill(6, 9, 1, 10, 0);
+        }
+        gameLevelUpTime--;
     }
 }
 
@@ -62,19 +82,19 @@ void GameDropRank() {
     gameKillTime = 0;
     gameSecondKills = 0;
     gamePreviousKills = 4;
-    gameEnemyNextSpawnFactor = gameLevel > 17 ? 10 : 55 - (gameLevel * 5);
-    PrintU8Vertical(2, 25, gameLevel);
+    gameEnemyNextSpawnFactor = gameLevel > 17
+        ? SPAWN_MIN_FACTOR
+        : SPAWN_MAX_FACTOR + SPAWN_FACTOR_DELTA - (gameLevel * SPAWN_FACTOR_DELTA);
     PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
-    PrintU8Vertical(4, 25, gameEnemySpawnWeight);
-    PrintU8Vertical(5, 25, gamePreviousKills);
+    PrintU8Vertical(4, 25, gamePreviousKills);
 }
 
 void GameSpawnUpdate() {
     gameEnemyNextSpawnTime--;
     if(!gameEnemyNextSpawnTime) {
         // Spawn enemy!
-        EnemyInitNext(gameEnemySpawnWeight);
+        EnemyInitNext(gameLevel);
 
-        gameEnemyNextSpawnTime = rand() % 30 + gameEnemyNextSpawnFactor;
+        gameEnemyNextSpawnTime = rand() % SPAWN_CONSTANT + gameEnemyNextSpawnFactor;
     }
 }

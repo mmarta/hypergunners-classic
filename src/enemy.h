@@ -13,12 +13,12 @@
 typedef enum {
     STANDARD,
     THRUSTER,
-    HAWKEYE,
-    BOLA
+    BOLA,
+    HAWKEYE
 } EnemyType;
 
 typedef struct {
-    u8 x, y, active, animTime, moveTime, dieTime, score, lane, preTime, alreadyFired;
+    u8 x, y, active, animTime, moveTime, dieTime, score, lane, preTime, alreadyFired, fireFactor;
     EnemyType type;
     Laser *currentLaser;
 } Enemy;

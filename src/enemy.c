@@ -2,7 +2,7 @@
 
 Enemy enemies[ENEMY_COUNT];
 
-void EnemyInit(Enemy *, EnemyType);
+void EnemyInit(Enemy *, EnemyType, u8);
 void EnemyFire(Enemy *);
 void EnemyDraw(Enemy *);
 void EnemyDeactivate(Enemy *);
@@ -10,19 +10,29 @@ void EnemyUpdateHawkeye(Enemy *);
 void EnemyUpdateBola(Enemy *);
 
 void EnemyInitNext(u8 weight) {
-    u8 i = ENEMY_COUNT;
+    u8 i = ENEMY_COUNT, fireFactor;
+
     while(i--) {
         if(!enemies[i].active) {
             // Use weight to figure out type
-            EnemyType weightedType = rand() % 4; // Random is placeholder
+            if(weight > 10) {
+                weight = 10 + rand() % 2;
+                fireFactor = 55;
+            } else if(weight >= 2) {
+                weight += rand() % 2;
+                fireFactor = 255 - (20 * weight);
+            } else {
+                fireFactor = 255;
+            }
+            EnemyType weightedType = (weight + rand() % 10) / 6;
 
-            EnemyInit(&enemies[i], weightedType);
+            EnemyInit(&enemies[i], weightedType, fireFactor);
             return;
         }
     }
 }
 
-void EnemyInit(Enemy *enemy, EnemyType t) {
+void EnemyInit(Enemy *enemy, EnemyType t, u8 fireFactor) {
     u8 i = 0;
     enemy->type = t;
 
@@ -69,6 +79,7 @@ void EnemyInit(Enemy *enemy, EnemyType t) {
             enemy->score = 1;
     }
 
+    enemy->fireFactor = fireFactor;
     enemy->alreadyFired = 0;
     enemy->currentLaser = NULL;
     EnemyDraw(enemy);
@@ -131,11 +142,11 @@ void EnemyUpdateBola(Enemy *enemy) {
         EnemyDeactivate(enemy);
         return;
     } else if(enemy->x == END_POINT_X) {
-        if(enemy->moveTime < 120) {
+        if(enemy->moveTime < enemy->fireFactor >> 1) {
             if(!modTime) {
                 EnemyDraw(enemy);
             }
-        } else if(enemy->moveTime == 120) {
+        } else {
             Fill(enemy->x, enemy->y, ENEMY_SIZE, ENEMY_SIZE, 0);
             enemy->x++;
             EnemyDraw(enemy);
@@ -208,7 +219,7 @@ void EnemyUpdate(Enemy *enemy) {
     } else {
         if(enemy->currentLaser && !enemy->currentLaser->active) {
             enemy->currentLaser = NULL;
-        } else if(rand() % 100 == 1) {
+        } else if(rand() % enemy->fireFactor == 1) {
             EnemyFire(enemy);
         }
 
@@ -245,19 +256,19 @@ void EnemyDraw(Enemy *enemy) {
     } else if(enemy->preTime) {
         if(enemy->type == THRUSTER) {
             if(bgTime < 8) {
-                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[3]);
+                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyThrusterPre[0]);
             } else if(bgTime < 16 || bgTime >= 24) {
-                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[4]);
+                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyThrusterPre[1]);
             } else {
-                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[5]);
+                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyThrusterPre[2]);
             }
         } else {
             if(bgTime < 8) {
-                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[0]);
+                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyStandardPre[0]);
             } else if(bgTime < 16 || bgTime >= 24) {
-                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[1]);
+                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyStandardPre[1]);
             } else {
-                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyPre[2]);
+                DrawMap(BACKGROUND_LINE_X - 1, enemy->y, mapEnemyStandardPre[2]);
             }
         }
 
@@ -265,13 +276,13 @@ void EnemyDraw(Enemy *enemy) {
     }
 
     if(enemy->type == HAWKEYE) {
-        DrawMap(enemy->x, enemy->y, mapEnemy[(enemy->animTime >> 2) + 9]);
+        DrawMap(enemy->x, enemy->y, mapEnemyHawkeye[enemy->animTime >> 2]);
     } else if(enemy->type == THRUSTER) {
-        DrawMap(enemy->x, enemy->y, mapEnemy[(enemy->animTime >> 2) + 6]);
+        DrawMap(enemy->x, enemy->y, enemy->x < SPLIT_POINT_X - 1 ? mapEnemyThrusterFar[enemy->animTime / 6] : mapEnemyThruster[enemy->animTime >> 2]);
     } else if(enemy->type == BOLA) {
-        DrawMap(enemy->x, enemy->y, mapEnemy[(enemy->animTime >> 2) + 12]);
+        DrawMap(enemy->x, enemy->y, mapEnemyBola[enemy->animTime >> 2]);
     } else {
-        DrawMap(enemy->x, enemy->y, mapEnemy[enemy->animTime >> 1]);
+        DrawMap(enemy->x, enemy->y, enemy->x < SPLIT_POINT_X - 1 ? mapEnemyStandardFar[enemy->animTime >> 2] : mapEnemyStandard[enemy->animTime >> 1]);
     }
 
 }
