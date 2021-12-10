@@ -20,6 +20,11 @@ const char *mapPlayerExplode[] = {
     mapPlayerExplode3
 };
 
+const char *mapPlayerMini[] = {
+    mapPlayerMini0,
+    mapPlayerMini1
+};
+
 const char *mapWhipline[] = {
     mapWhipline0,
     mapWhipline1,

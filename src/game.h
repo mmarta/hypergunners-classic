@@ -12,7 +12,7 @@
 #define SPAWN_FACTOR_DELTA 5
 
 // Rank items
-extern u8 gameLevel, gameFourSecondKills, gameKillTime, gameEnemyNextSpawnTime;
+extern u8 gameMode, gameLevel, gameFourSecondKills, gameKillTime, gameEnemyNextSpawnTime;
 extern u8 gameEnemySpawnWeight;
 
 void GameReset();

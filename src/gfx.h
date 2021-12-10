@@ -3,12 +3,13 @@
 
 #include "defines.h"
 
-#define LASER_TILE_START 214
+#define LASER_TILE_START 216
 
 extern const char gfxTiles[];
 
 extern const char *mapPlayer[];
 extern const char *mapPlayerExplode[];
+extern const char *mapPlayerMini[];
 extern const char *mapWhipline[];
 extern const char *mapEnemyStandard[];
 extern const char *mapEnemyStandardFar[];

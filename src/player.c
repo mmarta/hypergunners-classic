@@ -5,6 +5,7 @@ Player players[PLAYER_COUNT];
 void PlayerLaunchClaw(Player *, u8);
 void PlayerUpdateClaw(Player *);
 void PlayerDraw(Player *);
+void PlayerDrawLives(Player *);
 
 void PlayerInit(Player *player, u8 index) {
     player->index = index;
@@ -40,6 +41,8 @@ void PlayerInit(Player *player, u8 index) {
         PrintVerticalRAM(0, 24, "1P");
         PrintU16Vertical(1, 20, player->score, 50000, 1);
     }
+
+    PlayerDrawLives(player);
 }
 
 u8 PlayerIsControllable(Player *player) {
@@ -168,12 +171,13 @@ void PlayerAddScore(Player *player, u8 score, u8 isChainable) {
     if(isChainable && player->chainCount < 250) {
         player->hitTimer = 60;
         player->chainCount++;
-        if(player->chainCount == 2) {
-            player->chainClearTimer = 0;
-            PrintVerticalRAM(31, player->index ? 8 : 27, "CHAIN ");
-        }
 
         if(player->chainCount >= 2) {
+            if(player->chainCount == 2) {
+                player->chainClearTimer = 0;
+                PrintVerticalRAM(31, player->index ? 8 : 27, "CHAIN ");
+            }
+
             PrintU8Vertical(31,  player->index ? 0 : 19, player->chainCount);
         }
     }
@@ -244,6 +248,13 @@ void PlayerUpdate(Player *player) {
                 player->lane = 4;
                 player->y = CALC_Y_FROM_LANE(player->lane);
                 player->lives--;
+
+                PlayerDrawLives(player);
+
+                if(!player->lives) {
+                    player->active = 0;
+                    return;
+                }
             }
 
             switch(player->killTime % 4) {
@@ -362,4 +373,27 @@ void PlayerDraw(Player *player) {
     } else {
         DrawMap(player->x, player->y, mapPlayer[mapIndex + 3]);
     }
+}
+
+
+void PlayerDrawLives(Player *player) {
+    if(player->index) {
+        if(!player->lives) {
+            PrintVerticalRAM(0, 8, "GAME OVER");
+        } else {
+            PrintU8Vertical(0, 0, player->lives >= 10 ? 9 : player->lives - 1);
+            PrintVerticalRAM(0, 1, "X");
+            DrawMap(0, 2, mapPlayerMini[1]);
+        }
+    } else {
+        if(!player->lives) {
+            PrintVerticalRAM(0, 27, "GAME OVER");
+        } else {
+            PrintU8Vertical(0, 20, player->lives >= 10 ? 9 : player->lives - 1);
+            PrintVerticalRAM(0, 21, "X");
+            DrawMap(0, 22, mapPlayerMini[0]);
+        }
+    }
+
+
 }

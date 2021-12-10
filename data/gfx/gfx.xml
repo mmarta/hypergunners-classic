@@ -24,6 +24,9 @@
             <map var-name="mapPlayerClawRight" left="26" top="3" width="2" height="2" />
             <map var-name="mapPlayerClawWire" left="28" top="3" width="2" height="1" />
 
+            <map var-name="mapPlayerMini0" left="2" top="5" width="1" height="1" />
+            <map var-name="mapPlayerMini1" left="2" top="5" width="1" height="1" />
+
             <map var-name="mapWhipline0" left="30" top="3" width="1" height="2" />
             <map var-name="mapWhipline1" left="31" top="3" width="1" height="2" />
             <map var-name="mapWhipline2" left="0" top="5" width="1" height="2" />

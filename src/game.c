@@ -1,10 +1,12 @@
 #include "game.h"
 
-u8 gameLevel, gameSecondKills, gameKillTime, gameEnemyNextSpawnTime, gamePreviousKills;
-u8 gameEnemyNextSpawnFactor, gameLevelSeconds, gameLevelTick, gameLevelUpTime;
+u8 gameMode, gameLevel, gameSecondKills, gameKillTime, gameEnemyNextSpawnTime, gamePreviousKills;
+u8 gameEnemyNextSpawnFactor, gameLevelSeconds, gameLevelTick, gameLevelUpTime, gameOverTime;
 
 void GameReset() {
-    gameLevel = 1;
+    gameMode = 1;
+    gameOverTime = 0;
+    gameLevel = 2;
     gameSecondKills = 0;
     gamePreviousKills = 4;
     gameKillTime = 0;
@@ -25,8 +27,20 @@ void GameAddKill() {
 }
 
 void GameUpdateRank() {
+    if(gameOverTime) {
+        gameOverTime--;
+        if(!gameOverTime) {
+            gameMode = 0;
+        }
+        return;
+    } else if(!players[0].active && !players[1].active) {
+        gameOverTime = 150;
+        PrintVerticalRAM(8, 18, "GAME OVER!");
+        return;
+    }
+
     gameKillTime++;
-    if(gameKillTime >= 120) {
+    if(gameKillTime >= 240) {
         gameKillTime = 0;
         // PLACEHOLDER: Other rank calculations
         if(gameSecondKills > gamePreviousKills) {

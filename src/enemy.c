@@ -18,7 +18,7 @@ void EnemyInitNext(u8 weight) {
             if(weight > 10) {
                 weight = 10 + rand() % 2;
                 fireFactor = 55;
-            } else if(weight >= 2) {
+            } else if(weight >= 4) {
                 weight += rand() % 2;
                 fireFactor = 255 - (20 * weight);
             } else {
