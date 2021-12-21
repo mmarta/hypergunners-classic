@@ -29,5 +29,6 @@ void EnemyInitNext(u8);
 u8 EnemyIsCollidable(Enemy *);
 void EnemyKill(Enemy *);
 void EnemyUpdate(Enemy *);
+void EnemyDeactivate(Enemy *);
 
 #endif

@@ -33,6 +33,7 @@ void PlayerInit(Player *player, u8 index) {
     player->chainClearTimer = 0;
 
     player->lives = 3;
+    player->scorePos = 5;
 
     if(index) {
         PrintVerticalRAM(0, 4, "2P");
@@ -168,9 +169,11 @@ void PlayerUpdateClaw(Player *player) {
 
 void PlayerAddScore(Player *player, u8 score, u8 isChainable) {
     player->scoreDelta += score;
-    if(isChainable && player->chainCount < 250) {
+    if(isChainable) {
         player->hitTimer = 60;
-        player->chainCount++;
+        if(player->chainCount < 15) {
+            player->chainCount++;
+        }
 
         if(player->chainCount >= 2) {
             if(player->chainCount == 2) {
@@ -178,7 +181,11 @@ void PlayerAddScore(Player *player, u8 score, u8 isChainable) {
                 PrintVerticalRAM(31, player->index ? 8 : 27, "CHAIN ");
             }
 
-            PrintU8Vertical(31,  player->index ? 0 : 19, player->chainCount);
+            if(player->chainCount < 15) {
+                PrintU8Vertical(31,  player->index ? 0 : 19, player->chainCount);
+            } else {
+                PrintVerticalRAM(31,  player->index ? 2 : 21, "MAX");
+            }
         }
     }
 }
@@ -283,16 +290,22 @@ void PlayerUpdate(Player *player) {
         player->hitTimer--;
         if(!player->hitTimer) {
             if(player->chainCount >= 2) {
-                u8 multFactor = 2;
+                u8 multFactor = 2, bonusScore;
                 if(player->chainCount >= 8) {
                     multFactor = 4;
                 } else if(player->chainCount >= 4) {
                     multFactor = 3;
                 }
 
+                if(player->chainCount >= 15) {
+                    bonusScore = 250;
+                } else {
+                    bonusScore = player->chainCount << multFactor;
+                }
+
                 Fill(31, player->index ? 0 : 19, 1, 9, 0);
-                PrintU16Vertical(31, player->index ? 0 : 19, player->chainCount << multFactor, 50000, 1);
-                PlayerAddScore(player, player->chainCount << multFactor, 0);
+                PrintU16Vertical(31, player->index ? 0 : 19, bonusScore, 50000, 1);
+                PlayerAddScore(player, bonusScore, 0);
                 player->chainClearTimer = 60;
             }
             player->chainCount = 0;
@@ -394,6 +407,4 @@ void PlayerDrawLives(Player *player) {
             DrawMap(0, 22, mapPlayerMini[0]);
         }
     }
-
-
 }

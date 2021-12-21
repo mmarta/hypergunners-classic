@@ -35,6 +35,7 @@ extern const char mapEnemyLaser[];
 
 void PrintVerticalPROGMEM(u8, u8, const char *);
 void PrintVerticalRAM(u8, u8, const char *);
+void PrintVerticalChar(u8, u8, char);
 void PrintU8Vertical(u8, u8, u8);
 void PrintU16Vertical(u8, u8, u16, u16, u8);
 

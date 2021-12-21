@@ -5,7 +5,6 @@ Enemy enemies[ENEMY_COUNT];
 void EnemyInit(Enemy *, EnemyType, u8);
 void EnemyFire(Enemy *);
 void EnemyDraw(Enemy *);
-void EnemyDeactivate(Enemy *);
 void EnemyUpdateHawkeye(Enemy *);
 void EnemyUpdateBola(Enemy *);
 

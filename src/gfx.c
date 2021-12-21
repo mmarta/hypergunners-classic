@@ -122,6 +122,11 @@ void PrintVerticalRAM(u8 x, u8 y, const char *str) {
     }
 }
 
+
+void PrintVerticalChar(u8 x, u8 y, char ch) {
+    SetTile(x, y, ch - 32);
+}
+
 void PrintU8Vertical(u8 x, u8 y, u8 val) {
     u8 max = 0xff, first = 1, modVal;
 
