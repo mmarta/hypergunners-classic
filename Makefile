@@ -46,7 +46,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 ## Objects that must be built in order to link
 OBJECTS = uzeboxVideoEngineCore.o uzeboxCore.o uzeboxSoundEngine.o uzeboxSoundEngineCore.o uzeboxVideoEngine.o
 OBJECTS += system.o gfx.o background.o laser.o whipline.o player.o enemy.o
-OBJECTS += game.o collision.o main.o
+OBJECTS += collision.o game.o title.o main.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS =
@@ -101,6 +101,9 @@ collision.o: src/collision.c
 game.o: src/game.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $< -o game.o
 
+title.o: src/title.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $< -o title.o
+
 main.o: src/main.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $< -o main.o
 
@@ -132,6 +135,7 @@ clean:
 
 gfx:
 	$(GCONVERT_DIR)gconvert data/gfx/gfx.xml
+	$(GCONVERT_DIR)gconvert data/gfx/title-gfx.xml
 
 test:
 	$(UZEM_DIR)uzem $(GAME)-program.uze

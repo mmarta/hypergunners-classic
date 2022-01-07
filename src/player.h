@@ -17,7 +17,7 @@
 #define PLAYER_EXTRA_LASER_COUNT 2
 
 typedef struct {
-    u8 lane, x, y, active, animTime, killTime, index, destY, clawTime, scoreDelta;
+    u8 lane, x, y, active, joinable, animTime, killTime, index, destY, clawTime, scoreDelta;
     u8 fireButton, whipButton, leftStick, rightStick, superWeaponSeconds, timeOut;
     u8 superWeaponY, superWeaponFireTimer, lives, hitTimer, chainCount, chainClearTimer;
     u8 scorePos, letterEntryIndex;

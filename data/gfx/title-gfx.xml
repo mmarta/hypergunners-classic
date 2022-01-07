@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<gfx-xform version="1">
+    <input file="png/title-gfx.png" type="png" tile-width="8" tile-height="8" />
+    <output file="data/gfx/title-gfx.inc">
+        <tiles var-name="gfxTitleTiles" />
+        <maps pointers-size="8">
+            <map var-name="mapLogo" left="0" top="2" width="3" height="24" />
+        </maps>
+    </output>
+</gfx-xform>

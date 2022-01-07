@@ -6,6 +6,7 @@
 #define LASER_TILE_START 216
 
 extern const char gfxTiles[];
+extern const char gfxTitleTiles[];
 
 extern const char *mapPlayer[];
 extern const char *mapPlayerExplode[];
@@ -32,6 +33,8 @@ extern const char mapLaserPlayerTop[];
 extern const char mapLaserPlayerBottom[];
 
 extern const char mapEnemyLaser[];
+
+extern const char mapLogo[];
 
 void PrintVerticalPROGMEM(u8, u8, const char *);
 void PrintVerticalRAM(u8, u8, const char *);

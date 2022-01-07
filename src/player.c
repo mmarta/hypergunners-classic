@@ -15,6 +15,7 @@ void PlayerInit(Player *player, u8 index) {
 
     player->active = 1;
     player->animTime = 0;
+    player->killTime = 72;
     player->superWeaponSeconds = 0;
     player->score = 0;
     player->scoreDelta = 0;
@@ -393,6 +394,7 @@ void PlayerDrawLives(Player *player) {
     if(player->index) {
         if(!player->lives) {
             PrintVerticalRAM(0, 8, "GAME OVER");
+            player->joinable = 0;
         } else {
             PrintU8Vertical(0, 0, player->lives >= 10 ? 9 : player->lives - 1);
             PrintVerticalRAM(0, 1, "X");
@@ -400,6 +402,7 @@ void PlayerDrawLives(Player *player) {
         }
     } else {
         if(!player->lives) {
+            player->joinable = 0;
             PrintVerticalRAM(0, 27, "GAME OVER");
         } else {
             PrintU8Vertical(0, 20, player->lives >= 10 ? 9 : player->lives - 1);

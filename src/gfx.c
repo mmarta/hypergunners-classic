@@ -1,6 +1,7 @@
 #include "gfx.h"
 
 #include "../data/gfx/gfx.inc"
+#include "../data/gfx/title-gfx.inc"
 
 const char *mapPlayer[] = {
     mapPlayer0,

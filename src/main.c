@@ -3,34 +3,51 @@
 #include "gfx.h"
 #include "background.h"
 #include "player.h"
-#include "enemy.h"
 #include "game.h"
+#include "title.h"
 
 int main() {
+    u8 returnVal;
     srand(GetTrueRandomSeed());
 
-    SetTileTable(gfxTiles);
-    ClearVram();
+    gameMode = TITLE;
+    StartTitle();
 
     BackgroundInit();
-    PlayerInit(&players[0], 0);
-    //PlayerInit(&players[1], 1);
-
-    GameReset();
 
     // DEBUG CODE FOR REORDINGS
-    do {
+    /*do {
         ReadControls();
-    } while(!(controls[0] & BTN_DOWN));
+    } while(!(controls[0] & BTN_DOWN));*/
 
     while(1) {
         WaitVsync(1);
         ReadControls();
 
+        if(Coins()) {
+            if(gameMode == TITLE) {
+                PrintU8Vertical(30, 10, credits);
+                PrintVerticalRAM(30, 17, "CREDIT");
+            }
+        }
+
         if(gameMode == GAME) {
             UpdateGame();
+            if(gameMode == TITLE) {
+                StartTitle();
+            }
         } else if(gameMode == SCORE_ENTRY) {
             UpdateScoreEntry();
+            if(gameMode == TITLE) {
+                StartTitle();
+            }
+        } else if(gameMode == TITLE) {
+            returnVal = UpdateTitle();
+            if(returnVal) {
+                returnVal--;
+                GameReset();
+                PlayerInit(&players[returnVal], returnVal);
+            }
         }
     }
 

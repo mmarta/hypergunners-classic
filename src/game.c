@@ -5,28 +5,16 @@ u8 gameEnemyNextSpawnFactor, gameLevelSeconds, gameLevelTick, gameLevelUpTime, g
 
 GameMode gameMode;
 
-u16 gameHighScores[] = {
-    100,
-    80,
-    60,
-    40,
-    20
-};
-
-char gameHighScoreInitials[] = {
-    'R', 'B', 'T',
-    'M', 'R', 'M',
-    'S', 'L', 'M',
-    'B', 'A', 'M',
-    'D', 'M', 'M'
-};
-
 void GameInsertHighScore(u8, u16 *);
 void GamePrintHighScores();
 void GameClear();
 
 void GameReset() {
     gameMode = GAME;
+
+    SetTileTable(gfxTiles);
+    ClearVram();
+
     gameOverTime = 0;
     gameLevel = 1;
     gameSecondKills = 0;
@@ -42,6 +30,9 @@ void GameReset() {
 
     PrintVerticalRAM(3, 17, "TIME");
     PrintU8Vertical(3, 10, gameLevelSeconds);
+
+    players[0].joinable = 1;
+    players[1].joinable = 1;
 }
 
 void GameAddKill() {
@@ -149,17 +140,17 @@ void GameInsertHighScore(u8 pos, u16 *score) {
     u8 i = HIGH_SCORE_COUNT - 1, iOffset;
     while(i > pos) {
         iOffset = i * 3;
-        gameHighScores[i] = gameHighScores[i - 1];
-        gameHighScoreInitials[iOffset] = gameHighScoreInitials[iOffset - 3];
-        gameHighScoreInitials[iOffset + 1] = gameHighScoreInitials[iOffset - 2];
-        gameHighScoreInitials[iOffset + 2] = gameHighScoreInitials[iOffset - 1];
+        highScores[i] = highScores[i - 1];
+        highScoreInitials[iOffset] = highScoreInitials[iOffset - 3];
+        highScoreInitials[iOffset + 1] = highScoreInitials[iOffset - 2];
+        highScoreInitials[iOffset + 2] = highScoreInitials[iOffset - 1];
         i--;
     }
 
-    gameHighScores[pos] = *score;
-    gameHighScoreInitials[pos * 3] = 'A';
-    gameHighScoreInitials[pos * 3 + 1] = ' ';
-    gameHighScoreInitials[(pos * 3) + 2] = ' ';
+    highScores[pos] = *score;
+    highScoreInitials[pos * 3] = 'A';
+    highScoreInitials[pos * 3 + 1] = ' ';
+    highScoreInitials[(pos * 3) + 2] = ' ';
 }
 
 void GameUpdateHighScores() {
@@ -169,21 +160,20 @@ void GameUpdateHighScores() {
         pos = 5;
         players[i].scorePos = pos;
         while(j--) {
-            if(players[i].score > gameHighScores[j]) {
+            if(players[i].score > highScores[j]) { // Higher than the previous holder at this pos?
                 pos = j;
-                if(!j) {
+                if(!j) { // First place?
                     GameInsertHighScore(pos, &players[i].score);
                     players[i].scorePos = pos;
                     if(i && players[i].scorePos <= players[i - 1].scorePos) {
-                        players[i - 1].scorePos--;
+                        players[i - 1].scorePos++;
                     }
-                    break;
                 }
-            } else {
+            } else if(pos < 5) { // Stopped at 2nd thru 5th?
                 GameInsertHighScore(pos, &players[i].score);
                 players[i].scorePos = pos;
                 if(i && players[i].scorePos <= players[i - 1].scorePos) {
-                    players[i - 1].scorePos--;
+                    players[i - 1].scorePos++;
                 }
                 break;
             }
@@ -196,10 +186,10 @@ void GamePrintHighScores() {
     PrintVerticalRAM(6, 19, "TODAY'S BEST");
     for(u8 i = 0; i < HIGH_SCORE_COUNT; i++) {
         x = 8 + (i << 1);
-        PrintU16Vertical(x, 6, gameHighScores[i], 50000, 1);
-        PrintVerticalChar(x, 21, gameHighScoreInitials[(i * 3)]);
-        PrintVerticalChar(x, 20, gameHighScoreInitials[(i * 3) + 1]);
-        PrintVerticalChar(x, 19, gameHighScoreInitials[(i * 3) + 2]);
+        PrintU16Vertical(x, 6, highScores[i], 50000, 1);
+        PrintVerticalChar(x, 21, highScoreInitials[(i * 3)]);
+        PrintVerticalChar(x, 20, highScoreInitials[(i * 3) + 1]);
+        PrintVerticalChar(x, 19, highScoreInitials[(i * 3) + 2]);
 
         if(players[0].scorePos == i) {
             PrintVerticalChar(x, 23, '^');
@@ -223,11 +213,11 @@ void UpdateScoreEntry() {
         if(controls[i] & BTN_LEFT || controls[i] & BTN_RIGHT) {
             if(controls[i] & BTN_LEFT) {
                 if(!players[i].leftStick) {
-                    gameHighScoreInitials[j]--;
-                    if(gameHighScoreInitials[j] == 64) {
-                        gameHighScoreInitials[j] = 32;
-                    } else if(gameHighScoreInitials[j] == 31) {
-                        gameHighScoreInitials[j] = 90;
+                    highScoreInitials[j]--;
+                    if(highScoreInitials[j] == 64) {
+                        highScoreInitials[j] = 32;
+                    } else if(highScoreInitials[j] == 31) {
+                        highScoreInitials[j] = 90;
                     }
                 }
 
@@ -238,11 +228,11 @@ void UpdateScoreEntry() {
                 players[i].rightStick = 0;
             } else {
                 if(!players[i].rightStick) {
-                    gameHighScoreInitials[j]++;
-                    if(gameHighScoreInitials[j] == 91) {
-                        gameHighScoreInitials[j] = 32;
-                    } else if(gameHighScoreInitials[j] == 33) {
-                        gameHighScoreInitials[j] = 65;
+                    highScoreInitials[j]++;
+                    if(highScoreInitials[j] == 91) {
+                        highScoreInitials[j] = 32;
+                    } else if(highScoreInitials[j] == 33) {
+                        highScoreInitials[j] = 65;
                     }
                 }
 
@@ -252,7 +242,7 @@ void UpdateScoreEntry() {
                 }
                 players[i].leftStick = 0;
             }
-            PrintVerticalChar(x, 21 - players[i].letterEntryIndex, gameHighScoreInitials[j]);
+            PrintVerticalChar(x, 21 - players[i].letterEntryIndex, highScoreInitials[j]);
         } else {
             players[i].leftStick = 0;
             players[i].rightStick = 0;
@@ -263,8 +253,8 @@ void UpdateScoreEntry() {
                 players[i].letterEntryIndex++;
                 if(players[i].letterEntryIndex < 3) {
                     // Show the next "A" when the letter is entered
-                    gameHighScoreInitials[j + 1] = 'A';
-                    PrintVerticalChar(x, 21 - players[i].letterEntryIndex, gameHighScoreInitials[j + 1]);
+                    highScoreInitials[j + 1] = 'A';
+                    PrintVerticalChar(x, 21 - players[i].letterEntryIndex, highScoreInitials[j + 1]);
                 }
                 players[i].fireButton = 1;
             }
@@ -288,13 +278,23 @@ void UpdateScoreEntry() {
 // Main Game Update Code!
 
 void UpdateGame() {
-    u8 i, j, k, t = 0, playerCollisionCondition;
+    u8 i, j, k, t = 0;
+
+    // Join in?
+    if(credits) {
+        if(controls[0] & BTN_START && !players[0].active && players[0].joinable) {
+            credits--;
+            PlayerInit(&players[0], 0);
+        } else if(controls[1] & BTN_START && !players[1].active && players[1].joinable) {
+            credits--;
+            PlayerInit(&players[1], 1);
+        }
+    }
 
     // Collision first
     i = ENEMY_COUNT;
     while(i--) {
         j = 0;
-        //playerCollisionCondition = t ? j < PLAYER_COUNT : j != 0xff;
 
         while(j < PLAYER_COUNT) {
             k = 0;
@@ -313,21 +313,12 @@ void UpdateGame() {
 
             CollisionPlayerEnemy(&players[j], &enemies[i]);
             j++;
-
-            /*if(t) {
-                j++;
-                playerCollisionCondition = j < PLAYER_COUNT;
-            } else {
-                j--;
-                playerCollisionCondition = j != 0xff;
-            }*/
         }
     }
 
     i = ENEMY_LASER_COUNT;
     while(i--) {
         j = 0;
-        //playerCollisionCondition = t ? j < PLAYER_COUNT : j != 0xff;
 
         while(j < PLAYER_COUNT) {
             k = 0;
@@ -346,14 +337,6 @@ void UpdateGame() {
 
             CollisionLaserPlayer(&enemyLasers[i], &players[j]);
             j++;
-
-            /*if(t) {
-                j++;
-                playerCollisionCondition = j < PLAYER_COUNT;
-            } else {
-                j--;
-                playerCollisionCondition = j != 0xff;
-            }*/
         }
     }
 
@@ -375,6 +358,8 @@ void UpdateGame() {
             return;
         }
     } else if(!players[0].active && !players[1].active) {
+        players[0].joinable = 0;
+        players[1].joinable = 0;
         gameOverTime = 150;
         PrintVerticalRAM(8, 18, "GAME OVER!");
     }

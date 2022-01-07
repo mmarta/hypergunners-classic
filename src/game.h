@@ -13,8 +13,6 @@
 #define SPAWN_MAX_FACTOR 50
 #define SPAWN_FACTOR_DELTA 5
 
-#define HIGH_SCORE_COUNT 5
-
 typedef enum {
     TITLE,
     GAME,
@@ -25,9 +23,6 @@ typedef enum {
 // Rank items
 extern u8 gameLevel, gameFourSecondKills, gameKillTime, gameEnemyNextSpawnTime;
 extern u8 gameEnemySpawnWeight;
-
-extern u16 gameHighScores[];
-extern char gameHighScoreInitials[];
 
 extern GameMode gameMode;
 

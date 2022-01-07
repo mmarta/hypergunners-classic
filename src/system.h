@@ -5,8 +5,15 @@
 
 #define TOTAL_CONTROLS 2
 
+#define HIGH_SCORE_COUNT 5
+
 extern int controls[];
+extern u8 credits;
+
+extern u16 highScores[];
+extern char highScoreInitials[];
 
 void ReadControls();
+u8 Coins();
 
 #endif
