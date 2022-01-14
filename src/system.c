@@ -3,6 +3,7 @@
 int controls[TOTAL_CONTROLS];
 u8 coinSwitchDown = 0;
 u8 credits = 0;
+u8 repeatTicks = 0;
 
 u16 highScores[] = {
     100,

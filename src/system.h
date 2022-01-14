@@ -9,6 +9,7 @@
 
 extern int controls[];
 extern u8 credits;
+extern u8 repeatTicks;
 
 extern u16 highScores[];
 extern char highScoreInitials[];

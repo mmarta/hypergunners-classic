@@ -10,6 +10,7 @@ void GamePrintHighScores();
 void GameClear();
 
 void GameReset() {
+    u8 i = 0;
     gameMode = GAME;
 
     SetTileTable(gfxTiles);
@@ -31,8 +32,10 @@ void GameReset() {
     PrintVerticalRAM(3, 17, "TIME");
     PrintU8Vertical(3, 10, gameLevelSeconds);
 
-    players[0].joinable = 1;
-    players[1].joinable = 1;
+    while(i < PLAYER_COUNT) {
+        PlayerClearStats(&players[i]);
+        i++;
+    }
 }
 
 void GameAddKill() {
@@ -56,8 +59,8 @@ void GameUpdateRank() {
 
         gamePreviousKills = gameSecondKills;
         gameSecondKills = 0;
-        PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
-        PrintU8Vertical(4, 25, gamePreviousKills);
+        //PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
+        //PrintU8Vertical(4, 25, gamePreviousKills);
     }
 
     gameLevelTick--;
@@ -76,8 +79,8 @@ void GameUpdateRank() {
             gameEnemyNextSpawnFactor = gameEnemyNextSpawnFactor > SPAWN_MIN_FACTOR
                 ? gameEnemyNextSpawnFactor - SPAWN_FACTOR_DELTA
                 : SPAWN_MIN_FACTOR;
-            PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
-            PrintU8Vertical(4, 25, gamePreviousKills);
+            //PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
+            //PrintU8Vertical(4, 25, gamePreviousKills);
             gameLevelSeconds = 30;
         }
         gameLevelTick = 60;
@@ -100,8 +103,8 @@ void GameDropRank() {
     gameEnemyNextSpawnFactor = gameLevel > 17
         ? SPAWN_MIN_FACTOR
         : SPAWN_MAX_FACTOR + SPAWN_FACTOR_DELTA - (gameLevel * SPAWN_FACTOR_DELTA);
-    PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
-    PrintU8Vertical(4, 25, gamePreviousKills);
+    //PrintU8Vertical(3, 25, gameEnemyNextSpawnFactor);
+    //PrintU8Vertical(4, 25, gamePreviousKills);
 }
 
 void GameSpawnUpdate() {
@@ -358,6 +361,7 @@ void UpdateGame() {
             return;
         }
     } else if(!players[0].active && !players[1].active) {
+        // Make sure players can't join in at this point
         players[0].joinable = 0;
         players[1].joinable = 0;
         gameOverTime = 150;

@@ -29,6 +29,8 @@ typedef struct {
 
 extern Player players[];
 
+void PlayersInitMemory();
+void PlayerClearStats(Player *);
 void PlayerInit(Player *, u8);
 u8 PlayerIsControllable(Player *);
 u8 PlayerIsCollidable(Player *);

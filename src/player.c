@@ -7,8 +7,21 @@ void PlayerUpdateClaw(Player *);
 void PlayerDraw(Player *);
 void PlayerDrawLives(Player *);
 
+void PlayersInitMemory() {
+    for(u8 i = 0; i < PLAYER_COUNT; i++) {
+        players[i].active = 0;
+        players[i].index = i;
+    }
+}
+
+void PlayerClearStats(Player *player) {
+    player->joinable = 1;
+    player->score = 0;
+    player->scoreDelta = 0;
+    player->letterEntryIndex = 0;
+}
+
 void PlayerInit(Player *player, u8 index) {
-    player->index = index;
     player->lane = index ? 6 : 2;
     player->y = CALC_Y_FROM_LANE(player->lane);
     player->x = PLAYER_X;
@@ -32,14 +45,18 @@ void PlayerInit(Player *player, u8 index) {
     player->chainCount = 0;
     player->hitTimer = 0;
     player->chainClearTimer = 0;
+    player->letterEntryIndex = 0;
 
     player->lives = 3;
     player->scorePos = 5;
+    player->joinable = 0;
 
     if(index) {
+        Fill(0, 0, 1, 11, 0);
         PrintVerticalRAM(0, 4, "2P");
         PrintU16Vertical(1, 0, player->score, 50000, 1);
     } else {
+        Fill(0, 17, 1, 11, 0);
         PrintVerticalRAM(0, 24, "1P");
         PrintU16Vertical(1, 20, player->score, 50000, 1);
     }
@@ -214,6 +231,13 @@ void PlayerKill(Player *player) {
 void PlayerUpdate(Player *player) {
     // If the player is inactive, leave.
     if(!player->active) {
+        if(player->joinable) {
+            if(!repeatTicks) {
+                PrintVerticalRAM(0, player->index ? 10 : 27, credits ? "PRESS START" : "INSERT COIN");
+            } else if(repeatTicks == 60) {
+                Fill(0, player->index ? 0 : 17, 1, 11, 0);
+            }
+        }
         return;
     }
 
@@ -229,7 +253,6 @@ void PlayerUpdate(Player *player) {
         LaserUpdate(&player->extraLasers[i]);
         i++;
     }
-
     // Score updates first
     if(player->scoreDelta) {
         player->score += player->scoreDelta;
@@ -255,12 +278,30 @@ void PlayerUpdate(Player *player) {
             if(player->killTime == 68) {
                 player->lane = 4;
                 player->y = CALC_Y_FROM_LANE(player->lane);
+                player->clawTime = 0;
+
                 player->lives--;
+
+                // Clean up all lasers
+                i = 0;
+                while(i < PLAYER_LASER_COUNT) {
+                    LaserDeactivate(&player->lasers[i]);
+                    i++;
+                }
+
+                i = 0;
+                while(i < PLAYER_EXTRA_LASER_COUNT) {
+                    LaserDeactivate(&player->extraLasers[i]);
+                    i++;
+                }
 
                 PlayerDrawLives(player);
 
                 if(!player->lives) {
+                    // GAME OVER FOR PLAYER
+                    player->killTime = 0;
                     player->active = 0;
+
                     return;
                 }
             }
@@ -394,7 +435,6 @@ void PlayerDrawLives(Player *player) {
     if(player->index) {
         if(!player->lives) {
             PrintVerticalRAM(0, 8, "GAME OVER");
-            player->joinable = 0;
         } else {
             PrintU8Vertical(0, 0, player->lives >= 10 ? 9 : player->lives - 1);
             PrintVerticalRAM(0, 1, "X");
@@ -402,7 +442,6 @@ void PlayerDrawLives(Player *player) {
         }
     } else {
         if(!player->lives) {
-            player->joinable = 0;
             PrintVerticalRAM(0, 27, "GAME OVER");
         } else {
             PrintU8Vertical(0, 20, player->lives >= 10 ? 9 : player->lives - 1);

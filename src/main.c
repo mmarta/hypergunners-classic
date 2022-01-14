@@ -14,11 +14,12 @@ int main() {
     StartTitle();
 
     BackgroundInit();
+    PlayersInitMemory();
 
     // DEBUG CODE FOR REORDINGS
-    /*do {
+    do {
         ReadControls();
-    } while(!(controls[0] & BTN_DOWN));*/
+    } while(!(controls[0] & BTN_DOWN));
 
     while(1) {
         WaitVsync(1);
@@ -28,6 +29,7 @@ int main() {
             if(gameMode == TITLE) {
                 PrintU8Vertical(30, 10, credits);
                 PrintVerticalRAM(30, 17, "CREDIT");
+                CoinedTitle();
             }
         }
 
@@ -48,6 +50,11 @@ int main() {
                 GameReset();
                 PlayerInit(&players[returnVal], returnVal);
             }
+        }
+
+        repeatTicks++;
+        if(repeatTicks >= 120) {
+            repeatTicks = 0;
         }
     }
 

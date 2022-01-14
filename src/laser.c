@@ -64,8 +64,10 @@ void LaserUpdate(Laser *laser) {
 }
 
 void LaserDeactivate(Laser *laser) {
-    laser->active = 0;
-    Fill(laser->x, laser->y, LASER_W, LASER_H, 0);
+    if(laser->active) {
+        laser->active = 0;
+        Fill(laser->x, laser->y, LASER_W, LASER_H, 0);
+    }
 }
 
 // ENEMY lasers

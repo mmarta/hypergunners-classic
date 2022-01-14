@@ -26,9 +26,14 @@ void TitlePrintHighScores() {
         PrintVerticalChar(x, 20, highScoreInitials[(i * 3) + 1]);
         PrintVerticalChar(x, 19, highScoreInitials[(i * 3) + 2]);
     }
+
+    PrintVerticalRAM(20, 22, "GAME BY MARC MARTA");
+    PrintVerticalRAM(22, 22, "HARDWARE BY UZEBOX");
 }
 
 u8 UpdateTitle() {
+    u8 modTime = titleTime % 60;
+
     switch(titleTime) {
         case 0:
             ClearVram();
@@ -54,6 +59,10 @@ u8 UpdateTitle() {
     }
 
     if(credits) {
+        if(!modTime) {
+            PrintVerticalRAM(29, 23, "PRESS 1P OR 2P START");
+        }
+
         if(controls[0] & BTN_START) {
             credits--;
             return 1;
@@ -61,6 +70,14 @@ u8 UpdateTitle() {
             credits--;
             return 2;
         }
+    } else {
+        if(!modTime) {
+            PrintVerticalRAM(29, 19, "INSERT  COIN");
+        }
+    }
+
+    if(modTime == 30) {
+        Fill(29, 0, 1, 28, 0);
     }
 
     titleTime++;
@@ -69,4 +86,19 @@ u8 UpdateTitle() {
     }
 
     return 0;
+}
+
+void CoinedTitle() {
+    if(titleTime >= 420) {
+        ClearVram();
+    }
+
+    PrintU8Vertical(30, 10, credits);
+    PrintVerticalRAM(30, 17, "CREDIT");
+    PrintVerticalRAM(6, 19, "RED  BALLTOP");
+    PrintVerticalRAM(8, 17, "PRESENTS");
+    DrawMap(10, 2, mapLogo);
+    PrintVerticalRAM(13, 8, "CLASSIC");
+    PrintVerticalRAM(15, 22, "@2022 RED BALLTOP");
+    titleTime = 180;
 }

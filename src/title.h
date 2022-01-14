@@ -10,5 +10,6 @@ extern u16 titleTime;
 
 void StartTitle();
 u8 UpdateTitle();
+void CoinedTitle();
 
 #endif
